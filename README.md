@@ -3,6 +3,9 @@
 <img src=".github/assets/banner.svg" alt="MOLTamp Skins" width="100%"/>
 
 <br/>
+
+<img src=".github/assets/hero.png" alt="MOLTamp in action" width="720" style="border-radius: 12px; margin: 16px 0;"/>
+
 <br/>
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
