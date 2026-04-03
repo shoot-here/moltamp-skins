@@ -6,6 +6,10 @@
 
 <img src=".github/assets/hero.png" alt="MOLTamp in action" width="720" style="border-radius: 12px; margin: 16px 0;"/>
 
+<img src="screenshots/phosphor-full.png" alt="Phosphor skin — full cockpit" width="720" style="border-radius: 12px; margin: 8px 0;"/>
+
+<img src="screenshots/gnarl-fonts.png" alt="Gnarl companion" width="720" style="border-radius: 12px; margin: 8px 0;"/>
+
 <br/>
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
