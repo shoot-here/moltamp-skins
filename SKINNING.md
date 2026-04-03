@@ -2,6 +2,29 @@
 
 The single source of truth for building Moltamp skins.
 
+## Quick Start
+
+```bash
+# 1. Copy the template
+cp -r skins/_template skins/my-skin
+
+# 2. Edit the manifest
+$EDITOR skins/my-skin/skin.json
+
+# 3. Design your theme
+$EDITOR skins/my-skin/theme.css
+
+# 4. Add art (optional)
+cp ~/Downloads/cool-banner.gif skins/my-skin/assets/vibes.gif
+
+# 5. Launch and select your skin
+npm run electron:dev
+```
+
+Click the **Skins** button in the title bar, select your skin, and iterate.
+
+---
+
 ## The Rules
 
 These are non-negotiable. The validator enforces them, and community skins that break them won't be accepted.
@@ -82,13 +105,16 @@ Every `::before` and `::after` pseudo-element **must** include `pointer-events: 
 
 ---
 
-## Skin Format
+## Skin File Structure
 
 ```
 skins/my-skin/
-  skin.json          <- Required: manifest
-  theme.css          <- Required: all styles
-  assets/            <- Optional: images, GIFs, SVGs
+├── skin.json        ← Required: manifest
+├── theme.css        ← Required: all styles (100KB max)
+└── assets/          ← Optional: images, GIFs, fonts
+    ├── vibes.gif    ← Top banner art
+    ├── overlay.png  ← Texture overlays
+    └── icon.svg     ← Anything you want
 ```
 
 ### skin.json
@@ -104,7 +130,18 @@ skins/my-skin/
 }
 ```
 
-All fields required. `id` must match `^[a-zA-Z0-9_-]+$`.
+Required fields: `id`, `name`, `version`, `engine`. The `author` and `description` fields are recommended but not enforced by the validator.
+
+`id` must match `^[a-zA-Z0-9_-]+$`.
+
+#### Optional manifest fields
+
+| Field | Type | Purpose |
+|-------|------|---------|
+| `preview` | `string` | Path to a preview/thumbnail image |
+| `effects` | `object` | Labels and descriptions for custom effects (see [Custom Effects](#custom-effects)) |
+| `vibes` | `object` | GIF widget slot configuration (see [The Vibes Panel](#the-vibes-panel)) |
+| `layout` | `object` | Default panel layout shipped with the skin |
 
 ---
 
@@ -155,19 +192,30 @@ Built-in effects that Moltamp knows about:
 
 | Variable | Type | Purpose | Default |
 |----------|------|---------|---------|
-| `--effect-scanlines` | `0`–`1` | Scanline overlay | `0` |
-| `--effect-glow` | `0`–`1` | Inner glow | `0` |
-| `--effect-crt` | `0`–`1` | CRT curvature | `0` |
+| `--effect-scanlines` | `0`–`1` | Horizontal line overlay | `0` |
+| `--effect-glow` | `0`–`1` | Inset phosphor glow around terminal | `0` |
+| `--effect-crt` | `0`–`1` | Barrel distortion + edge shadow | `0` |
 | `--effect-vignette` | `0`–`1` | Darkened edge overlay | `0` |
-| `--effect-noise` | `0`–`1` | Film grain texture | `0` |
+| `--effect-noise` | `0`–`1` | Static noise / film grain | `0` |
 | `--effect-flicker` | `0`–`1` | CRT refresh animation | `0` |
 | `--effect-grid` | `0`–`1` | Background grid lines | `0` |
 | `--effect-text-glow` | `0`–`1` | Phosphor blur on text | `0` |
-| `--scanline-opacity` | `0`–`1` | Scanline intensity | `0.04` |
-| `--glow-intensity` | pixels | Glow blur radius | `12px` |
-| `--c-glow` | color | Glow color | `rgba(212,160,54,0.15)` |
 
-**Custom effects:** Declare any `--effect-*` variable in `:root` and it automatically appears in the Effects panel as a user toggle with an intensity slider. Name it anything:
+Effect parameters:
+
+| Variable | Type | Purpose | Default |
+|----------|------|---------|---------|
+| `--scanline-color` | color | Scanline overlay color | `rgba(255, 255, 255, 0.04)` |
+| `--glow-intensity` | pixels | Glow blur radius | `20px` |
+| `--c-glow` | color | Glow color | `rgba(212, 160, 54, 0.3)` |
+| `--vignette-color` | color | Vignette overlay color | `rgba(0, 0, 0, 0.5)` |
+| `--grid-color` | color | Grid line color | `rgba(255, 255, 255, 0.03)` |
+| `--grid-size` | pixels | Grid cell size | `20px` |
+| `--text-glow-color` | color | Text glow color | `var(--c-chrome-accent)` |
+
+#### Custom Effects
+
+Declare any `--effect-*` variable in `:root` and it **automatically appears** in the Effects panel as a user toggle with an intensity slider. No registration needed — Moltamp auto-discovers them.
 
 ```css
 :root {
@@ -176,13 +224,15 @@ Built-in effects that Moltamp knows about:
 }
 ```
 
-For nicer labels, add metadata in `skin.json`:
+Auto-labeling: the variable name is converted from kebab-case to title case (`heat-haze` → "Heat Haze"). The 8 built-in effects have hardcoded labels (e.g., `scanlines` → "Scanlines", `noise` → "Film Grain").
+
+For nicer labels, add metadata in `skin.json`. Values can be objects with `label`/`description`, or simply `true` for auto-labeling:
 
 ```json
 {
   "effects": {
     "radar": { "label": "Sonar Radar", "description": "Rotating sweep overlay" },
-    "heat-haze": { "label": "Heat Haze", "description": "Thermal distortion" }
+    "heat-haze": true
   }
 }
 ```
@@ -190,22 +240,28 @@ For nicer labels, add metadata in `skin.json`:
 Then use the variable in your CSS to control the effect:
 
 ```css
-.moltamp-vibes::before {
+.moltamp-panel-left::after {
+  content: '';
+  position: absolute;
+  inset: 0;
   opacity: var(--effect-radar);
   animation: radar-sweep 4s linear infinite;
+  pointer-events: none;
 }
 ```
 
 When the user toggles the effect off, `--effect-radar` becomes `0`, and `opacity: 0` hides it. When they adjust the slider, it scales between 0 and 1.
 
-### Typography (4 vars)
+### Typography (6 vars)
 
-| Variable | Default |
-|----------|---------|
-| `--font-terminal` | `'SF Mono', 'JetBrains Mono', monospace` |
-| `--font-chrome` | `'Inter', 'SF Pro Display', sans-serif` |
-| `--font-size` | `14px` |
-| `--font-line-height` | `1.35` |
+| Variable | Purpose | Default |
+|----------|---------|---------|
+| `--font-terminal` | Terminal font stack | `'SF Mono', 'JetBrains Mono', monospace` |
+| `--font-chrome` | Chrome/UI font stack | `'Inter', 'SF Pro Display', sans-serif` |
+| `--font-size` | Base font size | `14px` |
+| `--font-line-height` | Line height multiplier | `1.35` |
+| `--terminal-scale` | Terminal font size multiplier (1 = 100%) | `1` |
+| `--panel-scale` | Panel/chrome text multiplier (1 = 100%) | `1` |
 
 **Custom fonts:** Bundle font files in `assets/` and declare with `@font-face`:
 
@@ -261,7 +317,11 @@ Need colors the contract doesn't provide? Define **skin-local variables** in `:r
 }
 
 .moltamp-vibes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: var(--skin-overlay);
+  pointer-events: none;
 }
 ```
 
@@ -277,16 +337,16 @@ Need colors the contract doesn't provide? Define **skin-local variables** in `:r
 
 ### Layout
 
-| Class | What it is | Default |
-|-------|-----------|---------|
-| `.moltamp-shell` | Root container | Visible |
-| `.moltamp-titlebar` | Top title bar | Visible |
-| `.moltamp-vibes` | Top banner — your canvas | Visible |
-| `.moltamp-deck` | Holds left + terminal + right | Visible |
-| `.moltamp-panel-left` | Left panel (Intel tabs) | Visible |
-| `.moltamp-panel-right` | Right panel (Signal) | Visible |
-| `.moltamp-panel-bottom` | Bottom bar (Telemetry) | Visible |
-| `.moltamp-statusbar` | Bottom status bar | Visible |
+| Class | What it is |
+|-------|-----------|
+| `.moltamp-shell` | Root container |
+| `.moltamp-titlebar` | Top title bar |
+| `.moltamp-vibes` | Top banner — your canvas |
+| `.moltamp-deck` | Holds left + terminal + right |
+| `.moltamp-panel-left` | Left panel (Intel tabs) |
+| `.moltamp-panel-right` | Right panel (Signal) |
+| `.moltamp-panel-bottom` | Bottom bar (Telemetry) |
+| `.moltamp-statusbar` | Bottom status bar |
 
 ### Terminal
 
@@ -309,17 +369,31 @@ Need colors the contract doesn't provide? Define **skin-local variables** in `:r
 | `.moltamp-context-track` | Gauge background track |
 | `.moltamp-context-fill` | Gauge fill (width = context %) |
 | `.moltamp-context-label` | CONTEXT / % text row |
+| `.moltamp-context-value` | The percentage number |
 | `.moltamp-token-chart` | Token usage bar chart |
 | `.moltamp-stats` | Data readout container |
 | `.moltamp-stat-row` | Individual stat row |
-| `.moltamp-stat-cost` | Cost row |
-| `.moltamp-stat-time` | Time row |
+| `.moltamp-stat-label` | Label text in a stat row |
+| `.moltamp-stat-value` | Value text in a stat row |
+
+Stat rows get a second class based on their data key: `.moltamp-stat-cost`, `.moltamp-stat-time`, `.moltamp-stat-tokens-in`, `.moltamp-stat-tokens-out`, `.moltamp-stat-diff`, `.moltamp-stat-cache-read`, `.moltamp-stat-cache-write`, `.moltamp-stat-api-time`, `.moltamp-stat-agent`, `.moltamp-stat-rate-5h`, `.moltamp-stat-rate-7d`.
+
+### Media Widgets
+
+| Class | Element |
+|-------|---------|
+| `.moltamp-widget-music` | Now playing widget |
+| `.moltamp-widget-visualizer` | Audio visualizer widget |
+| `.moltamp-widget-equalizer` | EQ widget |
+| `.moltamp-equalizer` | EQ inner container |
+
+All widgets get `.moltamp-widget-{id}` on their container automatically.
 
 ---
 
 ## The Vibes Panel
 
-The `.moltamp-vibes` div is your hero canvas. All panels are visible by default — just style them.
+The `.moltamp-vibes` div is your hero canvas.
 
 **Backgrounds are not allowed** on `.moltamp-vibes`. The vibes panel is always transparent — all visual content (GIFs, images) must come from **GIF widget slots** defined in `skin.json`, not from CSS `background` or `background-image`. Moltamp enforces this with a `!important` override at load time.
 
@@ -332,6 +406,8 @@ The `.moltamp-vibes` div is your hero canvas. All panels are visible by default 
   }
 }
 ```
+
+The vibes panel supports **multiple slots** — each slot is a horizontal section with its own widget. Slots are resizable by the user via drag handles, and width ratios persist between sessions.
 
 Use `::before` and `::after` for overlays and effects — these are still allowed:
 
@@ -390,6 +466,7 @@ Set on `.moltamp-shell` — use for data-driven visuals.
 | `--data-cache-pct` | 0-100 | Cache hit ratio % |
 | `--data-agents` | int | Active subagent count |
 | `--data-git-changed` | int | Changed file count |
+| `--data-events` | int | Event count |
 
 ### String Attributes
 
@@ -403,17 +480,52 @@ Set on `.moltamp-shell` — use for data-driven visuals.
 ```css
 [data-model*="Opus"] .moltamp-model-badge { color: var(--t-magenta); }
 [data-model*="gpt"] .moltamp-model-badge { color: var(--t-green); }
+[data-model*="Gemini"] .moltamp-model-badge { color: var(--t-blue); }
 ```
 
-**Example: Context gauge as pie chart**
+**Example: Context gauge as ring**
 ```css
 .moltamp-context-gauge {
-  width: 80px; height: 80px;
+  width: 60px; height: 60px;
   border-radius: 50%;
   background: conic-gradient(
     var(--c-chrome-accent) calc(var(--data-context-pct) * 1%),
-    var(--c-chrome-border) 0
+    transparent 0
   );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.moltamp-context-gauge::after {
+  content: '';
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--c-chrome-bg);
+  pointer-events: none;
+}
+.moltamp-context-track { display: none; }
+```
+
+**Example: Cost-reactive vibes glow**
+```css
+.moltamp-shell { --cost-glow: calc(var(--data-cost-cents) * 0.5px); }
+.moltamp-vibes {
+  box-shadow: inset 0 0 var(--cost-glow) rgba(255, 100, 100, 0.3);
+}
+```
+
+**Example: Git change indicator dot**
+```css
+.moltamp-vibes::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; right: 4px;
+  width: calc(var(--data-git-changed) * 4px + 8px);
+  height: 8px;
+  background: var(--t-yellow);
+  border-radius: 4px;
+  opacity: calc(min(var(--data-git-changed), 1));
+  pointer-events: none;
 }
 ```
 
@@ -430,6 +542,10 @@ Bind animations to data attributes. Use `var()` for all colors.
   --skin-error-color:  #cc2200;
 }
 
+[data-activity="idle"] .moltamp-vibes {
+  filter: brightness(0.5);
+  transition: filter 1s ease;
+}
 [data-activity="high"] .moltamp-vibes {
   filter: brightness(1.2) saturate(1.1);
   animation: skin-glow 2s ease-in-out infinite;
@@ -441,6 +557,10 @@ Bind animations to data attributes. Use `var()` for all colors.
 
 [data-shell-state="error"] .moltamp-vibes {
   box-shadow: inset 0 0 20px var(--skin-error-color);
+}
+
+[data-shell-state="permission"] .moltamp-titlebar {
+  border-bottom: 2px solid var(--t-yellow);
 }
 
 @keyframes skin-glow {
@@ -455,7 +575,7 @@ Bind animations to data attributes. Use `var()` for all colors.
 
 ## Sprite Sheets
 
-For frame-by-frame animations, use a dedicated element inside a panel (not `.moltamp-vibes` — vibes backgrounds are blocked). Sprite sheets work well in `::before`/`::after` pseudo-elements on other panels:
+For frame-by-frame animations, use `::before`/`::after` pseudo-elements on panels:
 
 ```css
 .moltamp-panel-left::after {
@@ -480,43 +600,137 @@ For frame-by-frame animations, use a dedicated element inside a panel (not `.mol
 
 ---
 
-## Sharing
+## Using Assets
 
-**Export:** Settings > Skins > Export — saves as `.zip`
-**Import:** Settings > Skins > Import — select `.zip`
+Drop images in your skin's `assets/` folder. Reference with relative paths — the skin loader resolves them to absolute `file://` paths at runtime.
 
-The `.zip` file contains `skin.json`, `theme.css`, and `assets/`.
+```css
+.moltamp-panel-left {
+  background-image: url('./assets/sidebar-texture.png');
+  background-repeat: repeat;
+}
+```
+
+**Supported formats:** PNG, JPG, WebP, GIF, SVG, AVIF
+**Font formats:** WOFF2 (preferred), WOFF, TTF, OTF
+**Limits:** 5MB per file, 20MB total per skin
+
+Path traversal (`../`) is blocked — any `../` path is replaced with `url(about:blank)`.
 
 ---
 
-## Quick Start
+## Sharing & Distribution
 
-```bash
-cp -r skins/_template skins/my-skin
-```
+**Export:** Click Skins in the title bar, then Export — saves as `my-skin.zip`.
+**Import:** Click Skins, then Import — select any `.zip` file.
 
-1. Edit `skin.json` with your info
-2. Edit `theme.css` — set your palette in `:root`, style elements with `var()`
-3. Drop art in `assets/`, reference as `url('./assets/file.ext')`
-4. Launch Moltamp, open Settings > Skins, select your skin
+The `.zip` file contains `skin.json`, `theme.css`, and `assets/`. You can also share the skin folder directly — drop it into `skins/` and restart.
+
+When exporting, user-selected vibes GIFs from the global asset pool (`~/.moltamp/assets/`) are bundled into a `user-assets/` directory in the zip for portability. On import, these are extracted back to the global pool automatically.
+
+**Clone a skin:** Use "Save As" from the skin browser to duplicate an existing skin with a new name and ID for customization.
+
+**Built-in skins are protected** — they cannot be deleted. To customize one, clone it first.
+
+---
+
+## Validation
+
+Skin CSS is validated at load time. The validator returns **errors** (fatal — skin won't load) and **warnings** (logged but skin loads anyway).
+
+### Errors (block loading)
+
+- Missing required manifest fields (`id`, `name`, `version`, `engine`)
+- `theme.css` exceeds 100KB
+- Invalid skin ID (must match `^[a-zA-Z0-9_-]+$`)
+- Asset exceeds 5MB, or total assets exceed 20MB
+- CSS contains external URLs, `@import`, `javascript:`, or `expression()`
+
+### Warnings (logged, skin still loads)
+
+- `background` or `background-image` on `.moltamp-vibes`
+- `::before`/`::after` without `pointer-events: none`
+- `visibility: hidden` or `opacity: 0` on elements that could obscure permission prompts
+
+### Import validation
+
+- Zip-slip defense: extracted files verified to stay within the temp directory
+- Asset path containment: no directory traversal
 
 ---
 
 ## Preflight (Auto-Fixes at Load Time)
 
-Moltamp applies these overrides **after** your skin CSS loads. They protect interaction while giving skins full creative freedom.
+Moltamp applies these overrides **after** your skin CSS loads. They protect interaction while giving skins full creative freedom. The `!important` flag ensures preflight always wins.
 
 | What | Override | Why |
 |------|----------|-----|
 | `.moltamp-vibes` background | `background: transparent !important` | Vibes visuals come from GIF widget slots, not CSS |
-| All `::before` / `::after` | `pointer-events: none !important` | Pseudo-elements must never block clicks |
-| Buttons, inputs, links, draggables | `pointer-events: auto !important` | Interactive elements always stay clickable |
+| All `::before` / `::after` on `.moltamp-shell *` | `pointer-events: none !important` | Pseudo-elements must never block clicks |
+| Buttons, inputs, select, textarea, `[role="button"]`, anchors, `[draggable="true"]` | `pointer-events: auto !important` | Interactive elements always stay clickable |
 | Inputs, textareas | `cursor: text !important` | Text fields keep text cursor |
 | `.moltamp-shell` | `cursor: default !important` | Cursor never hidden globally |
 
 **Your skin can style anything visually.** Colors, gradients, shadows, animations, transforms, filters, blend modes — all unrestricted. The preflight only protects interaction: clicks, hovers, cursor, and drag.
 
-### For AI-generated skins
+---
+
+## Cookbook: Common Patterns
+
+### Minimal dark theme (just colors)
+
+```css
+:root {
+  --t-foreground: #c0c0c0;
+  --t-background: #111111;
+  --c-chrome-bg: #111111;
+  --c-chrome-accent: #ff6600;
+  --c-chrome-border: #333333;
+}
+```
+
+### Activate CRT effect
+
+```css
+:root {
+  --effect-scanlines: 1;
+  --effect-glow: 1;
+  --effect-crt: 1;
+  --scanline-color: rgba(255, 255, 255, 0.06);
+  --glow-intensity: 12px;
+}
+```
+
+### Style panels differently per side
+
+```css
+:root {
+  --skin-left-bg: linear-gradient(180deg, #0a0a0a 0%, #0f0f1a 100%);
+}
+
+.moltamp-panel-left {
+  background: var(--skin-left-bg);
+  border-right: 2px solid var(--c-chrome-accent);
+}
+.moltamp-panel-right {
+  background: var(--c-chrome-bg);
+}
+```
+
+---
+
+## Tips
+
+- **Performance:** Use `transform` and `opacity` for animations. Use `will-change` sparingly.
+- **Go bold:** Skins are art. Scanlines, glitch effects, parallax, color shifts — all encouraged.
+- **Test at sizes:** Vibes panel and side panels are resizable. Check your art at all sizes.
+- **Monochrome wins:** Pick one accent color and vary brightness. The built-in skins are good examples.
+- **Start from a built-in:** Clone an existing skin instead of the template if you want a head start.
+- **Use the data properties:** `--data-context-pct` as a gradient stop, `--data-cost-cents` as a glow radius — pure CSS, no JavaScript needed.
+
+---
+
+## For AI-Generated Skins
 
 If you're using ChatGPT, Claude, Codex, or another AI to generate a skin, **paste this entire block** with your prompt:
 
@@ -525,7 +739,8 @@ MOLTAMP SKIN RULES — follow these exactly:
 
 FILE STRUCTURE:
 - skin.json (manifest) + theme.css (all styles) + assets/ (images)
-- skin.json requires: id, name, version, author, description, engine: "1.0"
+- skin.json requires: id, name, version, engine: "1.0"
+- theme.css max 100KB
 
 CSS RULES:
 - ALL colors must be CSS variables in :root. Never hardcode hex/rgb in selectors.
@@ -577,6 +792,7 @@ Before sharing your skin:
 - [ ] No `background` or `background-image` on `.moltamp-vibes` (use GIF widget slots instead)
 - [ ] Every `::before`/`::after` has `pointer-events: none`
 - [ ] No external URLs or `@import`
+- [ ] `theme.css` under 100KB
 - [ ] Assets under 5MB each, 20MB total
 - [ ] Tested at different panel sizes (resize handles)
 - [ ] Right-click context menus work on all panels
