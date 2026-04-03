@@ -1,69 +1,131 @@
-# MOLTamp Skins
+<div align="center">
 
-Community skins for [MOLTamp](https://moltamp.com) — the skinnable shell for Claude Code.
+<img src=".github/assets/banner.svg" alt="MOLTamp Skins" width="100%"/>
 
-MOLTamp wraps Claude Code's terminal in a customizable cockpit UI. Think Winamp for AI terminals. Every panel, color, animation, and overlay is controlled by skins — pure CSS, zero JavaScript.
+<br/>
+<br/>
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Skins](https://img.shields.io/badge/skins-10-a855f7.svg?style=flat-square)](#browse-skins)
+[![Spec](https://img.shields.io/badge/spec-v2.0-4d9fff.svg?style=flat-square)](SKINNING.md)
+[![Website](https://img.shields.io/badge/moltamp.com-skinning-ec4899.svg?style=flat-square)](https://moltamp.com/skinning/)
+
+**[Download MOLTamp](https://moltamp.com)** &nbsp;&middot;&nbsp; **[Skinning Guide](https://moltamp.com/skinning/)** &nbsp;&middot;&nbsp; **[Main Repo](https://github.com/shoot-here/Moltamp)**
+
+</div>
+
+<br/>
 
 ## What is MOLTamp?
 
-MOLTamp is an Electron app that gives Claude Code a visual cockpit:
+MOLTamp wraps Claude Code's terminal in a skinnable cockpit UI — vibes panel, side panels, telemetry ticker, reactive animations. Everything responds to Claude's state through CSS. Think **Winamp for AI terminals**.
 
-- **Vibes panel** — GIF banner at the top, resizable, multi-slot
-- **Intel panel** — left sidebar with widgets (git, files, agents, events)
-- **Signal panel** — right sidebar with data readouts
-- **Telemetry bar** — bottom ticker with live stats
-- **Terminal** — the actual Claude Code PTY, fully skinnable
+> Pure CSS. Zero JavaScript. Full creative freedom.
 
-Everything reacts to Claude's state — thinking, streaming, tool use, errors — through CSS data attributes. Skins can animate based on activity, change colors per model, pulse on errors, glow during streaming.
+<br/>
 
-**Download:** [moltamp.com](https://moltamp.com)
-**Main repo:** [github.com/shoot-here/Moltamp](https://github.com/shoot-here/Moltamp)
-**Skinning guide:** [moltamp.com/skinning](https://moltamp.com/skinning/)
+## Browse Skins
 
-## This Repo
+<table>
+<tr>
+<td align="center" width="33%">
 
-This is the community skin repo. Browse skins, fork them, submit your own.
+**Obsidian**<br/>
+<sub>Clean dark default</sub>
 
-```
-skins/
-  blade-runner/       <- Each skin is a folder
-    skin.json         <- Manifest (id, name, author, etc.)
-    theme.css         <- All styles
-    assets/           <- GIFs, PNGs, SVGs (optional)
-    preview.png       <- Screenshot for the gallery (optional)
-```
+</td>
+<td align="center" width="33%">
 
-### Browse Skins
+**Phosphor**<br/>
+<sub>Green CRT terminal</sub>
 
-| Skin | Author | Description |
-|------|--------|-------------|
-| [Obsidian](skins/obsidian/) | MOLTamp | Clean dark default |
-| [Phosphor](skins/phosphor/) | MOLTamp | Green phosphor CRT terminal |
-| [Blade Runner](skins/blade-runner/) | MOLTamp | Amber noir with rain vibes |
-| [Deep Space](skins/deep-space/) | MOLTamp | Cyan deep-space station |
-| [Kosmos](skins/kosmos/) | MOLTamp | Soviet space program green |
-| [Biodiagnostic](skins/biodiagnostic/) | MOLTamp | Teal medical/biotech |
-| [Ice Nine](skins/ice-nine/) | MOLTamp | Frozen blue crystalline |
-| [LCARS](skins/lcars/) | MOLTamp | Star Trek computer interface |
-| [Lunar](skins/lunar/) | MOLTamp | Moon phase observatory |
-| [Neon Horizon](skins/neon-horizon/) | MOLTamp | Magenta/cyan synthwave |
+</td>
+<td align="center" width="33%">
 
-## Install a Skin
+**Blade Runner**<br/>
+<sub>Amber noir with rain</sub>
 
-1. Download the skin folder (or clone this repo)
-2. Open MOLTamp > Settings > Skins > Import
-3. Select the folder or `.zip`
+</td>
+</tr>
+<tr>
+<td align="center">
 
-Or copy directly:
+**Deep Space**<br/>
+<sub>Cyan space station</sub>
+
+</td>
+<td align="center">
+
+**Kosmos**<br/>
+<sub>Soviet space program</sub>
+
+</td>
+<td align="center">
+
+**Biodiagnostic**<br/>
+<sub>Teal medical/biotech</sub>
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
+**Ice Nine**<br/>
+<sub>Frozen blue crystalline</sub>
+
+</td>
+<td align="center">
+
+**LCARS**<br/>
+<sub>Star Trek computer</sub>
+
+</td>
+<td align="center">
+
+**Lunar**<br/>
+<sub>Moon phase observatory</sub>
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
+**Neon Horizon**<br/>
+<sub>Synthwave magenta/cyan</sub>
+
+</td>
+<td align="center" colspan="2">
+
+*Your skin here* &rarr; [submit a PR](#contributing)
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+## Install
+
 ```bash
-cp -r skins/blade-runner ~/Moltamp/skins/
+# Clone and copy
+git clone https://github.com/shoot-here/moltamp-skins.git
+cp -r moltamp-skins/skins/blade-runner ~/Moltamp/skins/
 ```
+
+Or: **MOLTamp > Settings > Skins > Import** &rarr; select folder or `.zip`
+
+<br/>
 
 ## Create a Skin
 
-A skin is a folder with two required files:
+```
+skins/my-skin/
+  skin.json         <- manifest
+  theme.css         <- all styles
+  assets/           <- GIFs, images (optional)
+```
 
-### skin.json
+### `skin.json`
 
 ```json
 {
@@ -71,46 +133,33 @@ A skin is a folder with two required files:
   "name": "My Skin",
   "version": "1.0.0",
   "author": "Your Name",
-  "description": "A short description.",
+  "description": "Short description.",
   "engine": "1.0"
 }
 ```
 
-### theme.css
-
-All colors as CSS variables in `:root`. Style elements with `var()`. Never hardcode colors in selectors.
+### `theme.css`
 
 ```css
 :root {
-  /* Required contract vars */
+  /* Contract — required */
   --t-foreground: #e0e0e8;
   --t-background: #0a0a0f;
   --c-chrome-bg: #0a0a0f;
-  --c-chrome-text: #9898a8;
-  --c-chrome-border: #1a1a2e;
   --c-chrome-accent: #d4a036;
-  --c-chrome-dim: #606070;
-  --c-chrome-hover: #1e1e32;
 
-  /* Your custom vars */
+  /* Your palette — use --skin-* prefix */
   --skin-panel-bg: #070b07;
   --skin-overlay: rgba(7, 11, 7, 0.15);
 
   /* Custom effects — auto-appear as toggles in Settings */
   --effect-scanlines: 1;
-  --effect-my-custom-effect: 0.5;
+  --effect-radar: 0.5;
 }
 
-/* Style everything with var() */
-.moltamp-panel-left { background: var(--skin-panel-bg); }
-
-/* Reactive — changes with Claude's state */
+/* Reactive — responds to Claude's state */
 [data-activity="high"] .moltamp-vibes {
   filter: brightness(1.2) saturate(1.1);
-}
-
-[data-shell-state="thinking"] .moltamp-terminal {
-  box-shadow: inset 0 0 20px rgba(100, 200, 255, 0.1);
 }
 
 /* Overlays — always include pointer-events: none */
@@ -119,105 +168,124 @@ All colors as CSS variables in `:root`. Style elements with `var()`. Never hardc
   position: absolute;
   inset: 0;
   background: var(--skin-overlay);
-  mix-blend-mode: multiply;
   pointer-events: none;
 }
 ```
 
-### Full Specification
+> **Full spec:** [SKINNING.md](SKINNING.md) &mdash; every variable, every class, reactive data, custom effects, AI prompt block.
 
-See [SKINNING.md](SKINNING.md) for the complete spec — every variable, every targetable class, reactive data attributes, custom effects, and the AI prompt block.
+<br/>
 
 ## The Rules
 
-1. **All colors in `:root`** as CSS variables. `var()` everywhere else.
-2. **Contract variables first** — override `--t-*` and `--c-chrome-*`.
-3. **Never hide panels** — users control visibility, skins control style.
-4. **No executable content** — no external URLs, `@import`, or JS.
-5. **No backgrounds on `.moltamp-vibes`** — use GIF widget slots in `skin.json`.
-6. **`pointer-events: none` on every `::before`/`::after`**.
-7. **Assets in `assets/`** — PNG, JPG, WebP, GIF, SVG, AVIF. Max 5MB/file.
+| # | Rule | Enforced |
+|---|------|----------|
+| 1 | All colors in `:root` as CSS variables | Validator |
+| 2 | Override contract vars (`--t-*`, `--c-chrome-*`) | Convention |
+| 3 | Custom vars use `--skin-*` prefix | Convention |
+| 4 | No `background` on `.moltamp-vibes` | Preflight |
+| 5 | `pointer-events: none` on `::before`/`::after` | Preflight |
+| 6 | No external URLs, `@import`, or JS | Validator |
+| 7 | Assets in `assets/`, max 5MB/file | Validator |
 
-MOLTamp enforces these at runtime with preflight overrides — skins literally cannot break clicks, hovers, or drag handles.
+**Preflight** = MOLTamp auto-fixes it at load time. Your skin literally cannot break clicks, hovers, or drag handles.
+
+<br/>
 
 ## Custom Effects
 
-Any `--effect-*` variable in `:root` automatically appears in the Effects settings panel as a user toggle with an intensity slider.
+Any `--effect-*` variable in `:root` auto-appears in **Settings > Effects** as a toggle with intensity slider.
 
 ```css
 :root {
-  --effect-radar: 1;       /* "Radar" toggle at 100% */
-  --effect-heat-haze: 0;   /* "Heat Haze" toggle, off by default */
+  --effect-radar: 1;        /* "Radar" at 100% */
+  --effect-heat-haze: 0;    /* "Heat Haze", off by default */
 }
-```
 
-Use the variable to control visibility:
-```css
+/* Control visibility with the variable */
 .moltamp-vibes::before {
   opacity: var(--effect-radar);
-  animation: radar-sweep 4s linear infinite;
+  animation: sweep 4s linear infinite;
   pointer-events: none;
 }
 ```
 
-Add nice labels in `skin.json`:
+Nice labels via `skin.json`:
+
 ```json
-{
-  "effects": {
-    "radar": { "label": "Sonar Radar", "description": "Rotating sweep overlay" }
-  }
-}
+{ "effects": { "radar": { "label": "Sonar Radar", "description": "Rotating sweep" } } }
 ```
+
+<br/>
 
 ## Reactive Data
 
-Skins can react to Claude's live state via data attributes on `.moltamp-shell`:
+Skins react to Claude's live state via attributes on `.moltamp-shell`:
+
+```css
+/* Claude is thinking */
+[data-shell-state="thinking"] .moltamp-terminal {
+  box-shadow: inset 0 0 30px rgba(100, 200, 255, 0.1);
+}
+
+/* Heavy streaming */
+[data-activity="high"] .moltamp-vibes {
+  filter: brightness(1.3);
+}
+
+/* Context gauge as pie chart */
+.moltamp-context-gauge {
+  background: conic-gradient(
+    var(--c-chrome-accent) calc(var(--data-context-pct) * 1%),
+    var(--c-chrome-border) 0
+  );
+}
+```
+
+<details>
+<summary><strong>All reactive attributes &amp; properties</strong></summary>
 
 | Attribute | Values |
 |-----------|--------|
-| `data-activity` | `idle`, `low`, `high` |
-| `data-shell-state` | `idle`, `thinking`, `streaming`, `tool-use`, `permission`, `error`, `complete` |
-| `data-model` | Model name string |
+| `data-activity` | `idle` `low` `high` |
+| `data-shell-state` | `idle` `thinking` `streaming` `tool-use` `permission` `error` `complete` |
+| `data-model` | Model name |
 
-And live CSS custom properties:
+| CSS Property | Description |
+|-------------|-------------|
+| `--data-context-pct` | Context used (0-100) |
+| `--data-cost-cents` | Session cost |
+| `--data-tokens-in` | Input tokens (K) |
+| `--data-tokens-out` | Output tokens (K) |
+| `--data-rate-5h` | 5h rate limit (0-100) |
+| `--data-agents` | Active subagents |
+| `--data-git-changed` | Changed files |
 
-| Property | Description |
-|----------|-------------|
-| `--data-context-pct` | Context window used (0-100) |
-| `--data-cost-cents` | Session cost in cents |
-| `--data-tokens-in` | Input tokens (thousands) |
-| `--data-tokens-out` | Output tokens (thousands) |
-| `--data-rate-5h` | 5-hour rate limit (0-100) |
-| `--data-agents` | Active subagent count |
-| `--data-git-changed` | Changed file count |
+</details>
 
-## Using AI to Generate Skins
+<br/>
 
-Point ChatGPT, Claude, Codex, or any AI at the [SKINNING.md](SKINNING.md) spec. It contains a ready-to-paste prompt block in the "For AI-generated skins" section.
+## Using AI
 
-MOLTamp's preflight system auto-fixes common AI mistakes (missing `pointer-events: none`, vibes backgrounds, etc.), so AI-generated skins work safely even when the AI doesn't follow every rule perfectly.
+Point ChatGPT, Claude, or Codex at [SKINNING.md](SKINNING.md) — it has a ready-to-paste prompt block in the **"For AI-generated skins"** section.
+
+MOLTamp's preflight system auto-fixes common AI mistakes, so generated skins work safely even when the AI misses a rule.
+
+<br/>
 
 ## Contributing
 
 1. Fork this repo
-2. Create your skin in `skins/your-skin-name/`
-3. Include `skin.json`, `theme.css`, and optionally `assets/` + `preview.png`
-4. Open a PR
+2. Create `skins/your-skin-id/` with `skin.json` + `theme.css`
+3. Add a `preview.png` screenshot
+4. [Open a PR](../../pulls)
 
-### PR Checklist
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide and checklist.
 
-- [ ] `skin.json` has all required fields
-- [ ] All colors are CSS variables in `:root`
-- [ ] Custom variables use `--skin-*` prefix
-- [ ] No hardcoded colors in selectors
-- [ ] Every `::before`/`::after` has `pointer-events: none`
-- [ ] No `background` on `.moltamp-vibes`
-- [ ] No external URLs or `@import`
-- [ ] Assets under 5MB each, 20MB total
-- [ ] `preview.png` screenshot included
-- [ ] Right-click menus work on all panels
-- [ ] Tested at different panel sizes
+<br/>
 
-## License
+<div align="center">
 
-MIT
+<sub>Made for the community by <a href="https://moltamp.com">MOLTamp</a></sub>
+
+</div>
