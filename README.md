@@ -10,7 +10,7 @@
 [![Spec](https://img.shields.io/badge/spec-v2.0-4d9fff.svg?style=flat-square)](SKINNING.md)
 [![Website](https://img.shields.io/badge/moltamp.com-skinning-ec4899.svg?style=flat-square)](https://moltamp.com/skinning/)
 
-**[Download MOLTamp](https://moltamp.com)** &nbsp;&middot;&nbsp; **[Skinning Guide](https://moltamp.com/skinning/)** &nbsp;&middot;&nbsp; **[Main Repo](https://github.com/shoot-here/Moltamp)**
+**[Download MOLTamp](https://moltamp.com)** &nbsp;&middot;&nbsp; **[Skinning Guide](SKINNING.md)**
 
 </div>
 
