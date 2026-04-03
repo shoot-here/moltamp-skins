@@ -74,7 +74,8 @@ Every `::before` and `::after` pseudo-element **must** include `pointer-events: 
 ### 8. Assets stay in `assets/`
 
 - Reference with `url('./assets/filename.ext')`
-- Supported: PNG, JPG, WebP, GIF, SVG, AVIF
+- Supported images: PNG, JPG, WebP, GIF, SVG, AVIF
+- Supported fonts: WOFF2, WOFF, TTF, OTF
 - Max 5MB per file, 20MB per skin
 - No nested directories in `assets/`
 - No path traversal (`../`)
@@ -205,6 +206,23 @@ When the user toggles the effect off, `--effect-radar` becomes `0`, and `opacity
 | `--font-chrome` | `'Inter', 'SF Pro Display', sans-serif` |
 | `--font-size` | `14px` |
 | `--font-line-height` | `1.35` |
+
+**Custom fonts:** Bundle font files in `assets/` and declare with `@font-face`:
+
+```css
+@font-face {
+  font-family: 'MyTermFont';
+  src: url('./assets/my-font.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --font-terminal: 'MyTermFont', 'SF Mono', monospace;
+}
+```
+
+Supported formats: `.woff2` (preferred), `.woff`, `.ttf`, `.otf`. Same size limits as images (5MB/file).
 
 ### Layout (3 vars)
 
@@ -464,10 +482,10 @@ For frame-by-frame animations, use a dedicated element inside a panel (not `.mol
 
 ## Sharing
 
-**Export:** Settings > Skins > Export — saves as `.moltamp` (zip)
-**Import:** Settings > Skins > Import — select `.moltamp` or `.zip`
+**Export:** Settings > Skins > Export — saves as `.zip`
+**Import:** Settings > Skins > Import — select `.zip`
 
-The `.moltamp` file contains `skin.json`, `theme.css`, and `assets/`.
+The `.zip` file contains `skin.json`, `theme.css`, and `assets/`.
 
 ---
 
