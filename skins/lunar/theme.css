@@ -1,0 +1,568 @@
+/* ═══════════════════════════════════════════════════════════════
+   LUNAR — Blood Red Monochrome
+
+   Deep red on black. Moon phases drift in the left panel.
+   A red waveform pulses below. Scanlines burn across the void.
+   The terminal glows like a dying star.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Terminal — pure red monochrome */
+  --t-foreground:    #ff3300;
+  --t-background:    #0a0404;
+  --t-cursor:        #ff3300;
+  --t-cursor-accent: #0a0404;
+  --t-selection:     rgba(255, 51, 0, 0.18);
+
+  --t-black:    #120606;
+  --t-red:      #ff3300;
+  --t-green:    #aa1100;
+  --t-yellow:   #ff6644;
+  --t-blue:     #881400;
+  --t-magenta:  #dd2200;
+  --t-cyan:     #ff4433;
+  --t-white:    #ff3300;
+
+  --t-bright-black:    #331111;
+  --t-bright-red:      #ff5533;
+  --t-bright-green:    #cc2200;
+  --t-bright-yellow:   #ff8866;
+  --t-bright-blue:     #aa2200;
+  --t-bright-magenta:  #ee4433;
+  --t-bright-cyan:     #ff6655;
+  --t-bright-white:    #ffaa88;
+
+  /* Chrome */
+  --c-chrome-bg:       #060202;
+  --c-chrome-text:     #cc3311;
+  --c-chrome-border:   #2a0c0c;
+  --c-chrome-accent:   #ff3300;
+  --c-chrome-dim:      #882200;
+  --c-chrome-hover:    #1a0808;
+
+  /* Effects — scanlines and glow ON, CRT off */
+  --effect-scanlines:  1;
+  --effect-glow:       1;
+  --effect-crt:        0;
+  --scanline-opacity:  0.07;
+  --glow-intensity:    18px;
+  --c-glow:            rgba(255, 51, 0, 0.10);
+
+  /* Typography */
+  --font-terminal: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  --font-chrome:   'SF Pro Display', 'Inter', -apple-system, sans-serif;
+
+  /* Layout */
+  --radius: 0px;
+  --chrome-height: 38px;
+  --statusbar-height: 28px;
+
+  /* Skin-Local */
+  --skin-void-bg:             #0a0404;
+  --skin-panel-bg:            #060202;
+  --skin-border-subtle:       #2a0c0c;
+  --skin-primary:             #ff3300;
+  --skin-primary-dim:         #cc2200;
+  --skin-label-deep:          #661400;
+  --skin-label-mid:           #aa2200;
+  --skin-titlebar-top:        #0e0505;
+  --skin-red-003:             rgba(255, 51, 0, 0.03);
+  --skin-red-004:             rgba(255, 51, 0, 0.04);
+  --skin-red-006:             rgba(255, 51, 0, 0.06);
+  --skin-red-008:             rgba(255, 51, 0, 0.08);
+  --skin-red-015:             rgba(255, 51, 0, 0.15);
+  --skin-red-018:             rgba(255, 51, 0, 0.18);
+  --skin-red-020:             rgba(255, 51, 0, 0.2);
+  --skin-red-025:             rgba(255, 51, 0, 0.25);
+  --skin-red-030:             rgba(255, 51, 0, 0.3);
+  --skin-red-035:             rgba(255, 51, 0, 0.35);
+  --skin-red-040:             rgba(255, 51, 0, 0.4);
+  --skin-red-050:             rgba(255, 51, 0, 0.5);
+  --skin-red-055:             rgba(255, 51, 0, 0.55);
+  --skin-red-060:             rgba(255, 51, 0, 0.6);
+  --skin-overlay-backdrop:    rgba(6, 2, 2, 0.88);
+  --skin-vignette:            rgba(10, 4, 4, 0.6);
+  --skin-crt-shadow-dark:     rgba(0, 0, 0, 0.5);
+  --skin-crt-shadow-medium:   rgba(0, 0, 0, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SHELL — Deep void with subtle noise
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-shell {
+  background:
+    radial-gradient(ellipse at 50% 30%, var(--skin-red-003) 0%, transparent 60%),
+    var(--skin-void-bg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LEFT PANEL — IntelPanel container (no pseudo-elements)
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-left {
+  background: var(--skin-panel-bg);
+  border-right: 1px solid var(--skin-border-subtle);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIBES BANNER — Moon Phase Display
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-vibes {
+  height: 120px;
+  border-bottom: 1px solid var(--skin-border-subtle);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Moon phase row — eight phases arranged horizontally */
+.moltamp-vibes::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 80px;
+  flex-shrink: 0;
+  background: transparent;
+  /* Eight moon phases arranged horizontally using box-shadows.
+     Each moon is a circle with a shadow overlay to create the phase. */
+  box-shadow:
+    /* New Moon — fully dark with faint rim */
+    0px 0px 0 -12px var(--skin-void-bg),
+    0px 14px 1px -12px var(--skin-red-015),
+    0px -14px 1px -12px var(--skin-red-015),
+
+    /* Waxing Crescent */
+    60px 0px 0 0px var(--skin-red-006),
+    60px 5px 0 -1px var(--skin-red-035),
+    60px 8px 0 -3px var(--skin-red-050),
+
+    /* First Quarter — right half lit */
+    120px 0px 0 0px var(--skin-red-006),
+    120px 5px 0 0px var(--skin-red-040),
+    120px 9px 0 -2px var(--skin-red-055),
+
+    /* Waxing Gibbous */
+    180px 0px 0 0px var(--skin-red-035),
+    180px 4px 0 0px var(--skin-red-050),
+    180px -3px 0 -1px var(--skin-red-025),
+
+    /* Full Moon — fully lit, glowing */
+    240px 0px 0 0px var(--skin-red-060),
+    240px 0px 8px 2px var(--skin-red-015),
+    240px 0px 20px 0px var(--skin-red-008),
+
+    /* Waning Gibbous */
+    300px 0px 0 0px var(--skin-red-035),
+    300px -4px 0 0px var(--skin-red-050),
+    300px 3px 0 -1px var(--skin-red-025),
+
+    /* Last Quarter — left half lit */
+    360px 0px 0 0px var(--skin-red-006),
+    360px -5px 0 0px var(--skin-red-040),
+    360px -9px 0 -2px var(--skin-red-055),
+
+    /* Waning Crescent */
+    420px 0px 0 0px var(--skin-red-006),
+    420px -5px 0 -1px var(--skin-red-035),
+    420px -8px 0 -3px var(--skin-red-050);
+
+  animation: moon-drift 60s linear infinite;
+}
+
+@keyframes moon-drift {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-60px); }
+}
+
+/* Phase labels and decorative marks */
+.moltamp-vibes::after {
+  content: '◌  🌑 NEW   🌒 WAX   🌓 1ST   🌔 GIB   🌕 FULL   🌖 WAN   🌗 LST   🌘 WAN';
+  white-space: pre;
+  font-family: var(--font-terminal);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  color: var(--skin-label-deep);
+  text-align: center;
+  line-height: 1.2;
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  animation: phase-labels-drift 60s linear infinite;
+}
+
+@keyframes phase-labels-drift {
+  0%   { transform: translateX(0); opacity: 0.6; }
+  50%  { opacity: 0.8; }
+  100% { transform: translateX(-60px); opacity: 0.6; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM PANEL — Red Sine Waveform
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-bottom {
+  height: 56px;
+  background: var(--skin-panel-bg);
+  border-top: 1px solid var(--skin-border-subtle);
+  align-items: center;
+  padding: 0 16px;
+  gap: 24px;
+  font-size: 9px;
+  font-family: var(--font-terminal);
+  color: var(--c-chrome-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Waveform — sine wave built from box-shadow dots */
+.moltamp-panel-bottom::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 48px;
+  position: absolute;
+  left: 0;
+  top: 4px;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 7px,
+      var(--skin-red-004) 7px, var(--skin-red-004) 8px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px, transparent 11px,
+      var(--skin-red-003) 11px, var(--skin-red-003) 12px
+    );
+  box-shadow:
+    20px 24px 0 -22px var(--skin-primary),
+    30px 16px 0 -22px var(--skin-primary),
+    40px 10px 0 -22px var(--skin-primary),
+    50px 8px  0 -22px var(--skin-primary),
+    60px 10px 0 -22px var(--skin-primary),
+    70px 16px 0 -22px var(--skin-primary),
+    80px 24px 0 -22px var(--skin-primary),
+    90px 32px 0 -22px var(--skin-primary),
+    100px 38px 0 -22px var(--skin-primary),
+    110px 40px 0 -22px var(--skin-primary),
+    120px 38px 0 -22px var(--skin-primary),
+    130px 32px 0 -22px var(--skin-primary),
+    140px 24px 0 -22px var(--skin-primary),
+    150px 16px 0 -22px var(--skin-primary),
+    160px 10px 0 -22px var(--skin-primary),
+    170px 8px  0 -22px var(--skin-primary),
+    180px 10px 0 -22px var(--skin-primary),
+    190px 16px 0 -22px var(--skin-primary),
+    200px 24px 0 -22px var(--skin-primary),
+    210px 32px 0 -22px var(--skin-primary),
+    220px 38px 0 -22px var(--skin-primary),
+    230px 40px 0 -22px var(--skin-primary),
+    240px 38px 0 -22px var(--skin-primary),
+    250px 32px 0 -22px var(--skin-primary),
+    260px 24px 0 -22px var(--skin-primary),
+    270px 16px 0 -22px var(--skin-primary),
+    280px 10px 0 -22px var(--skin-primary),
+    290px 8px  0 -22px var(--skin-primary),
+    300px 10px 0 -22px var(--skin-primary),
+    310px 16px 0 -22px var(--skin-primary),
+    320px 24px 0 -22px var(--skin-primary),
+    330px 32px 0 -22px var(--skin-primary),
+    340px 38px 0 -22px var(--skin-primary),
+    350px 40px 0 -22px var(--skin-primary),
+    360px 38px 0 -22px var(--skin-primary),
+    370px 32px 0 -22px var(--skin-primary),
+    380px 24px 0 -22px var(--skin-primary),
+    390px 16px 0 -22px var(--skin-primary),
+    400px 10px 0 -22px var(--skin-primary),
+    410px 8px  0 -22px var(--skin-primary),
+    420px 10px 0 -22px var(--skin-primary),
+    430px 16px 0 -22px var(--skin-primary),
+    440px 24px 0 -22px var(--skin-primary),
+    450px 32px 0 -22px var(--skin-primary),
+    460px 38px 0 -22px var(--skin-primary),
+    470px 40px 0 -22px var(--skin-primary),
+    480px 38px 0 -22px var(--skin-primary),
+    490px 32px 0 -22px var(--skin-primary),
+    500px 24px 0 -22px var(--skin-primary),
+    510px 16px 0 -22px var(--skin-primary),
+    520px 10px 0 -22px var(--skin-primary),
+    530px 8px  0 -22px var(--skin-primary),
+    540px 10px 0 -22px var(--skin-primary),
+    550px 16px 0 -22px var(--skin-primary),
+    560px 24px 0 -22px var(--skin-primary),
+    570px 32px 0 -22px var(--skin-primary),
+    580px 38px 0 -22px var(--skin-primary),
+    590px 40px 0 -22px var(--skin-primary),
+    600px 38px 0 -22px var(--skin-primary);
+  animation: wave-pulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes wave-pulse {
+  0% {
+    box-shadow:
+      20px 24px 0 -22px var(--skin-primary),
+      30px 16px 0 -22px var(--skin-primary),
+      40px 10px 0 -22px var(--skin-primary),
+      50px 8px  0 -22px var(--skin-primary),
+      60px 10px 0 -22px var(--skin-primary),
+      70px 16px 0 -22px var(--skin-primary),
+      80px 24px 0 -22px var(--skin-primary),
+      90px 32px 0 -22px var(--skin-primary),
+      100px 38px 0 -22px var(--skin-primary),
+      110px 40px 0 -22px var(--skin-primary),
+      120px 38px 0 -22px var(--skin-primary),
+      130px 32px 0 -22px var(--skin-primary),
+      140px 24px 0 -22px var(--skin-primary),
+      150px 16px 0 -22px var(--skin-primary),
+      160px 10px 0 -22px var(--skin-primary),
+      170px 8px  0 -22px var(--skin-primary),
+      180px 10px 0 -22px var(--skin-primary),
+      190px 16px 0 -22px var(--skin-primary),
+      200px 24px 0 -22px var(--skin-primary),
+      210px 32px 0 -22px var(--skin-primary),
+      220px 38px 0 -22px var(--skin-primary),
+      230px 40px 0 -22px var(--skin-primary),
+      240px 38px 0 -22px var(--skin-primary),
+      250px 32px 0 -22px var(--skin-primary),
+      260px 24px 0 -22px var(--skin-primary),
+      270px 16px 0 -22px var(--skin-primary),
+      280px 10px 0 -22px var(--skin-primary),
+      290px 8px  0 -22px var(--skin-primary),
+      300px 10px 0 -22px var(--skin-primary),
+      310px 16px 0 -22px var(--skin-primary),
+      320px 24px 0 -22px var(--skin-primary),
+      330px 32px 0 -22px var(--skin-primary),
+      340px 38px 0 -22px var(--skin-primary),
+      350px 40px 0 -22px var(--skin-primary),
+      360px 38px 0 -22px var(--skin-primary),
+      370px 32px 0 -22px var(--skin-primary),
+      380px 24px 0 -22px var(--skin-primary),
+      390px 16px 0 -22px var(--skin-primary),
+      400px 10px 0 -22px var(--skin-primary),
+      410px 8px  0 -22px var(--skin-primary),
+      420px 10px 0 -22px var(--skin-primary),
+      430px 16px 0 -22px var(--skin-primary),
+      440px 24px 0 -22px var(--skin-primary),
+      450px 32px 0 -22px var(--skin-primary),
+      460px 38px 0 -22px var(--skin-primary),
+      470px 40px 0 -22px var(--skin-primary),
+      480px 38px 0 -22px var(--skin-primary),
+      490px 32px 0 -22px var(--skin-primary),
+      500px 24px 0 -22px var(--skin-primary),
+      510px 16px 0 -22px var(--skin-primary),
+      520px 10px 0 -22px var(--skin-primary),
+      530px 8px  0 -22px var(--skin-primary),
+      540px 10px 0 -22px var(--skin-primary),
+      550px 16px 0 -22px var(--skin-primary),
+      560px 24px 0 -22px var(--skin-primary),
+      570px 32px 0 -22px var(--skin-primary),
+      580px 38px 0 -22px var(--skin-primary),
+      590px 40px 0 -22px var(--skin-primary),
+      600px 38px 0 -22px var(--skin-primary);
+  }
+  100% {
+    box-shadow:
+      20px 32px 0 -22px var(--skin-primary-dim),
+      30px 38px 0 -22px var(--skin-primary-dim),
+      40px 40px 0 -22px var(--skin-primary-dim),
+      50px 38px 0 -22px var(--skin-primary-dim),
+      60px 32px 0 -22px var(--skin-primary-dim),
+      70px 24px 0 -22px var(--skin-primary-dim),
+      80px 16px 0 -22px var(--skin-primary-dim),
+      90px 10px 0 -22px var(--skin-primary-dim),
+      100px 8px  0 -22px var(--skin-primary-dim),
+      110px 10px 0 -22px var(--skin-primary-dim),
+      120px 16px 0 -22px var(--skin-primary-dim),
+      130px 24px 0 -22px var(--skin-primary-dim),
+      140px 32px 0 -22px var(--skin-primary-dim),
+      150px 38px 0 -22px var(--skin-primary-dim),
+      160px 40px 0 -22px var(--skin-primary-dim),
+      170px 38px 0 -22px var(--skin-primary-dim),
+      180px 32px 0 -22px var(--skin-primary-dim),
+      190px 24px 0 -22px var(--skin-primary-dim),
+      200px 16px 0 -22px var(--skin-primary-dim),
+      210px 10px 0 -22px var(--skin-primary-dim),
+      220px 8px  0 -22px var(--skin-primary-dim),
+      230px 10px 0 -22px var(--skin-primary-dim),
+      240px 16px 0 -22px var(--skin-primary-dim),
+      250px 24px 0 -22px var(--skin-primary-dim),
+      260px 32px 0 -22px var(--skin-primary-dim),
+      270px 38px 0 -22px var(--skin-primary-dim),
+      280px 40px 0 -22px var(--skin-primary-dim),
+      290px 38px 0 -22px var(--skin-primary-dim),
+      300px 32px 0 -22px var(--skin-primary-dim),
+      310px 24px 0 -22px var(--skin-primary-dim),
+      320px 16px 0 -22px var(--skin-primary-dim),
+      330px 10px 0 -22px var(--skin-primary-dim),
+      340px 8px  0 -22px var(--skin-primary-dim),
+      350px 10px 0 -22px var(--skin-primary-dim),
+      360px 16px 0 -22px var(--skin-primary-dim),
+      370px 24px 0 -22px var(--skin-primary-dim),
+      380px 32px 0 -22px var(--skin-primary-dim),
+      390px 38px 0 -22px var(--skin-primary-dim),
+      400px 40px 0 -22px var(--skin-primary-dim),
+      410px 38px 0 -22px var(--skin-primary-dim),
+      420px 32px 0 -22px var(--skin-primary-dim),
+      430px 24px 0 -22px var(--skin-primary-dim),
+      440px 16px 0 -22px var(--skin-primary-dim),
+      450px 10px 0 -22px var(--skin-primary-dim),
+      460px 8px  0 -22px var(--skin-primary-dim),
+      470px 10px 0 -22px var(--skin-primary-dim),
+      480px 16px 0 -22px var(--skin-primary-dim),
+      490px 24px 0 -22px var(--skin-primary-dim),
+      500px 32px 0 -22px var(--skin-primary-dim),
+      510px 38px 0 -22px var(--skin-primary-dim),
+      520px 40px 0 -22px var(--skin-primary-dim),
+      530px 38px 0 -22px var(--skin-primary-dim),
+      540px 32px 0 -22px var(--skin-primary-dim),
+      550px 24px 0 -22px var(--skin-primary-dim),
+      560px 16px 0 -22px var(--skin-primary-dim),
+      570px 10px 0 -22px var(--skin-primary-dim),
+      580px 8px  0 -22px var(--skin-primary-dim),
+      590px 10px 0 -22px var(--skin-primary-dim),
+      600px 16px 0 -22px var(--skin-primary-dim);
+  }
+}
+
+/* Waveform label */
+.moltamp-panel-bottom::after {
+  content: 'LUNAR ◆ PHASE 0.73 ◆ PERIAPSIS';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--skin-label-deep);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  animation: label-pulse 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes label-pulse {
+  0%, 100% { color: var(--skin-label-deep); }
+  50%      { color: var(--skin-label-mid); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TITLE BAR
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-titlebar {
+  background: linear-gradient(180deg, var(--skin-titlebar-top) 0%, var(--skin-void-bg) 100%);
+  border-bottom: 1px solid var(--skin-border-subtle);
+  text-shadow: 0 0 8px var(--skin-red-030);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATUS BAR
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-statusbar {
+  background: var(--skin-panel-bg);
+  border-top: 1px solid var(--skin-border-subtle);
+  text-shadow: 0 0 4px var(--skin-red-020);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TERMINAL — Glow + CRT
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-terminal {
+  border-left: 1px solid var(--skin-red-006);
+  border-right: 1px solid var(--skin-red-006);
+  text-shadow: 0 0 3px var(--skin-red-015);
+}
+
+.moltamp-terminal.glow-active {
+  animation: lunar-pulse 5s ease-in-out infinite;
+}
+
+@keyframes lunar-pulse {
+  0%, 100% { box-shadow: inset 0 0 15px var(--skin-red-004); }
+  50%      { box-shadow: inset 0 0 35px var(--skin-red-008); }
+}
+
+.moltamp-terminal.crt-active {
+  border-radius: 12px;
+}
+
+.moltamp-terminal.crt-active::before {
+  box-shadow:
+    inset 0 0 100px var(--skin-crt-shadow-dark),
+    inset 0 0 30px var(--skin-crt-shadow-medium);
+  border-radius: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATED SCAN LINE — sweeps down the terminal
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-terminal::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--skin-red-008) 15%,
+    var(--skin-red-020) 50%,
+    var(--skin-red-008) 85%,
+    transparent 100%
+  );
+  z-index: 12;
+  animation: red-scan-sweep 6s linear infinite;
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+}
+
+@keyframes red-scan-sweep {
+  0%   { top: -2px; opacity: 0; }
+  3%   { opacity: var(--effect-scanlines); }
+  97%  { opacity: var(--effect-scanlines); }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SKIN BROWSER
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-skin-overlay {
+  background: var(--skin-overlay-backdrop);
+}
+
+.moltamp-skin-panel {
+  border-color: var(--skin-border-subtle);
+  box-shadow: 0 0 40px var(--skin-red-006);
+}
+
+.moltamp-skin-card.active {
+  border-color: var(--skin-primary);
+  box-shadow: 0 0 10px var(--skin-red-018);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RED HALFTONE VIGNETTE — dithered edge texture
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-shell::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 50%, var(--skin-vignette) 100%);
+  pointer-events: none;
+  z-index: 0;
+}

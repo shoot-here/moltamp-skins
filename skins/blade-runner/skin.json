@@ -1,0 +1,18 @@
+{
+  "id": "blade-runner",
+  "name": "Blade Runner",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Voight-Kampff terminal. Amber monochrome dossier panels, dithered imagery, threat assessment grids. Do you dream of electric sheep?",
+  "engine": "1.0",
+  "effects": {
+    "scanlines": true,
+    "glow": true,
+    "crt": true
+  },
+  "vibes": {
+    "slots": [
+      { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
+    ]
+  }
+}

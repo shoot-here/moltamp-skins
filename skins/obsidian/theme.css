@@ -1,0 +1,45 @@
+/* ═══════════════════════════════════════════════════════════════
+   OBSIDIAN — Default Moltamp Skin
+
+   Deep black with amber accents. Subtle warmth.
+   The reference skin — copy this to build your own.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Terminal colors */
+  --t-foreground:    #e0e0e8;
+  --t-background:    #0a0a0f;
+  --t-cursor:        #d4a036;
+  --t-cursor-accent: #0a0a0f;
+  --t-selection:     rgba(212, 160, 54, 0.25);
+
+  --t-black:    #1a1a2e;
+  --t-red:      #e04040;
+  --t-green:    #36d480;
+  --t-yellow:   #d4a036;
+  --t-blue:     #3678d4;
+  --t-magenta:  #b040e0;
+  --t-cyan:     #36b5d4;
+  --t-white:    #e0e0e8;
+
+  --t-bright-black:    #3a3a52;
+  --t-bright-red:      #ff5555;
+  --t-bright-green:    #50fa7b;
+  --t-bright-yellow:   #f1c232;
+  --t-bright-blue:     #6299e6;
+  --t-bright-magenta:  #c678dd;
+  --t-bright-cyan:     #56d4ef;
+  --t-bright-white:    #ffffff;
+
+  /* Chrome */
+  --c-chrome-bg:       #0a0a0f;
+  --c-chrome-text:     #9898a8;
+  --c-chrome-border:   #1a1a2e;
+  --c-chrome-accent:   #d4a036;
+  --c-chrome-dim:      #606070;
+
+  /* Effects — subtle scanlines */
+  --effect-scanlines: 1;
+  --scanline-opacity: 0.025;
+  --c-glow: rgba(212, 160, 54, 0.1);
+}

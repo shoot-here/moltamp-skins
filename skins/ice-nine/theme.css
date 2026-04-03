@@ -1,0 +1,193 @@
+/* ═══════════════════════════════════════════════════════════════
+   ICE NINE — Cold Blue Terminal
+
+   Deep navy base. Cyan accents. Frosted chrome.
+   Slow breathing glow like a frozen machine waking up.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Terminal — cold blue palette */
+  --t-foreground:    #b8d4e8;
+  --t-background:    #060a10;
+  --t-cursor:        #00d4ff;
+  --t-cursor-accent: #060a10;
+  --t-selection:     rgba(0, 212, 255, 0.18);
+
+  --t-black:    #0c1420;
+  --t-red:      #ff4466;
+  --t-green:    #44ffaa;
+  --t-yellow:   #ffcc44;
+  --t-blue:     #44aaff;
+  --t-magenta:  #cc66ff;
+  --t-cyan:     #00d4ff;
+  --t-white:    #b8d4e8;
+
+  --t-bright-black:    #1e2e42;
+  --t-bright-red:      #ff6688;
+  --t-bright-green:    #66ffcc;
+  --t-bright-yellow:   #ffdd66;
+  --t-bright-blue:     #66ccff;
+  --t-bright-magenta:  #dd88ff;
+  --t-bright-cyan:     #44e8ff;
+  --t-bright-white:    #e8f0ff;
+
+  /* Chrome */
+  --c-chrome-bg:       #060a10;
+  --c-chrome-text:     #5588aa;
+  --c-chrome-border:   #0e1a2a;
+  --c-chrome-accent:   #00d4ff;
+  --c-chrome-dim:      #2a4460;
+  --c-chrome-hover:    #0c1828;
+
+  /* Effects */
+  --effect-scanlines: 1;
+  --effect-glow:      1;
+  --effect-crt:       0;
+  --scanline-opacity: 0.03;
+  --glow-intensity:   16px;
+  --c-glow:           rgba(0, 212, 255, 0.08);
+
+  --font-terminal: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ── Vibes — Sci-fi HUD ──────────────────────────────────────── */
+
+.moltamp-vibes {
+  min-height: 60px;
+  border-bottom: 1px solid #0a1a2a;
+  position: relative;
+  overflow: hidden;
+}
+
+.moltamp-vibes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 16, 0.1);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.moltamp-vibes::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(2, 8, 16, 0.06) 2px, rgba(2, 8, 16, 0.06) 4px
+  );
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+}
+
+[data-activity="high"] .moltamp-vibes {
+  animation: ice-vibes-glow 2s ease-in-out infinite;
+}
+
+@keyframes ice-vibes-glow {
+  0%, 100% { box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.05); }
+  50% { box-shadow: inset 0 0 40px rgba(0, 212, 255, 0.15); }
+}
+
+/* ── Frosted Edge Glow ───────────────────────────────────────── */
+
+.moltamp-terminal.glow-active {
+  box-shadow:
+    inset 0 0 16px rgba(0, 212, 255, 0.05),
+    inset 0 1px 0 rgba(0, 212, 255, 0.06);
+  animation: ice-breathe 6s ease-in-out infinite;
+}
+
+@keyframes ice-breathe {
+  0%, 100% {
+    box-shadow:
+      inset 0 0 16px rgba(0, 212, 255, 0.04),
+      inset 0 1px 0 rgba(0, 212, 255, 0.04);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 30px rgba(0, 212, 255, 0.08),
+      inset 0 1px 0 rgba(0, 212, 255, 0.08);
+  }
+}
+
+/* ── Title Bar — frosted line ────────────────────────────────── */
+
+.moltamp-titlebar {
+  border-bottom: 1px solid rgba(0, 212, 255, 0.08);
+  background: linear-gradient(180deg, rgba(0, 212, 255, 0.03) 0%, transparent 100%);
+}
+
+/* ── Status Bar — cold accent ────────────────────────────────── */
+
+.moltamp-statusbar {
+  border-top: 1px solid rgba(0, 212, 255, 0.06);
+}
+
+/* ── Corner Accent Lights ────────────────────────────────────── */
+
+.moltamp-terminal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.15) 20%,
+    rgba(0, 212, 255, 0.3) 50%,
+    rgba(0, 212, 255, 0.15) 80%,
+    transparent 100%
+  );
+  z-index: 12;
+  pointer-events: none;
+  animation: edge-pulse 4s ease-in-out infinite;
+}
+
+@keyframes edge-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+
+/* ── Bottom Edge Line ────────────────────────────────────────── */
+
+.moltamp-terminal::after {
+  /* Keep scanlines from base, add bottom glow line */
+}
+
+.moltamp-shell::after {
+  content: '';
+  position: fixed;
+  bottom: 24px; /* above status bar */
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.1) 30%,
+    rgba(0, 212, 255, 0.2) 50%,
+    rgba(0, 212, 255, 0.1) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Skin Browser — icy ──────────────────────────────────────── */
+
+.moltamp-skin-overlay {
+  background: rgba(4, 8, 14, 0.85);
+}
+
+.moltamp-skin-panel {
+  border-color: rgba(0, 212, 255, 0.12);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.06);
+}
+
+.moltamp-skin-card.active {
+  border-color: #00d4ff;
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.12);
+}

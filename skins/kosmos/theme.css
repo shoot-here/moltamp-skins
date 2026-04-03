@@ -1,0 +1,370 @@
+/* ═══════════════════════════════════════════════════════════════
+   KOSMOS — Soviet Mission Control
+
+   Baikonur, 1975. Amber phosphor on dark green CRT.
+   Orbital trajectory arcs. Cyrillic telemetry tickers.
+   The hum of vacuum tubes and the crackle of shortwave.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Terminal — amber/yellow on dark green */
+  --t-foreground:    #ccaa00;
+  --t-background:    #0a0f0a;
+  --t-cursor:        #ffcc00;
+  --t-cursor-accent: #0a0f0a;
+  --t-selection:     rgba(255, 204, 0, 0.15);
+
+  --t-black:    #0d120d;
+  --t-red:      #cc6600;
+  --t-green:    #33aa33;
+  --t-yellow:   #ffcc00;
+  --t-blue:     #5a8a3a;
+  --t-magenta:  #aa7722;
+  --t-cyan:     #77aa44;
+  --t-white:    #ccaa00;
+
+  --t-bright-black:    #1a2a1a;
+  --t-bright-red:      #ee8833;
+  --t-bright-green:    #55cc55;
+  --t-bright-yellow:   #ffdd44;
+  --t-bright-blue:     #77aa55;
+  --t-bright-magenta:  #ccaa44;
+  --t-bright-cyan:     #99cc66;
+  --t-bright-white:    #ffe066;
+
+  /* Chrome */
+  --c-chrome-bg:       #080c08;
+  --c-chrome-text:     #9a8833;
+  --c-chrome-border:   #1a2a14;
+  --c-chrome-accent:   #ffcc00;
+  --c-chrome-dim:      #554411;
+  --c-chrome-hover:    #0f1a0f;
+
+  /* Effects — full Soviet CRT */
+  --effect-scanlines:  1;
+  --effect-glow:       1;
+  --effect-crt:        1;
+  --scanline-opacity:  0.08;
+  --glow-intensity:    18px;
+  --c-glow:            rgba(255, 204, 0, 0.08);
+
+  /* Typography */
+  --font-terminal: 'SF Mono', 'JetBrains Mono', 'Fira Code', monospace;
+  --font-chrome:   'SF Pro Display', 'Inter', -apple-system, sans-serif;
+
+  /* Layout */
+  --radius: 2px;
+  --chrome-height: 38px;
+  --statusbar-height: 28px;
+
+  /* Skin-Local */
+  --skin-grid-fine:             rgba(51, 170, 51, 0.04);
+  --skin-grid-coarse:           rgba(51, 170, 51, 0.025);
+  --skin-vignette-center:       #0d140d;
+  --skin-vignette-mid:          #080c08;
+  --skin-vignette-outer:        #050805;
+  --skin-panel-bg:              #070b07;
+  --skin-panel-bg-deep:         #060a06;
+  --skin-vibes-tint:            rgba(7, 11, 7, 0.15);
+  --skin-vibes-scanline:        rgba(7, 11, 7, 0.06);
+  --skin-orbit-glow-outer:      rgba(255, 204, 0, 0.4);
+  --skin-ticker-dim:            #665511;
+  --skin-ticker-low:            #887722;
+  --skin-ticker-high:           #aa9933;
+  --skin-titlebar-top:          #0a100a;
+  --skin-overlay-bg:            rgba(4, 6, 4, 0.9);
+  --skin-amber-glow-04:         rgba(255, 204, 0, 0.04);
+  --skin-amber-glow-06:         rgba(255, 204, 0, 0.06);
+  --skin-amber-glow-08:         rgba(255, 204, 0, 0.08);
+  --skin-amber-glow-10:         rgba(255, 204, 0, 0.1);
+  --skin-amber-glow-12:         rgba(255, 204, 0, 0.12);
+  --skin-amber-glow-15:         rgba(255, 204, 0, 0.15);
+  --skin-amber-glow-50:         rgba(255, 204, 0, 0.5);
+  --skin-crt-shadow-heavy:      rgba(0, 0, 0, 0.6);
+  --skin-crt-shadow-mid:        rgba(0, 0, 0, 0.4);
+  --skin-crt-shadow-light:      rgba(0, 0, 0, 0.2);
+  --skin-green-glow-05:         rgba(51, 170, 51, 0.05);
+  --skin-green-glow-15:         rgba(51, 170, 51, 0.15);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SHELL — Dark Green Grid Background
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-shell {
+  background:
+    /* Fine grid — like graph paper on a CRT (gated by --effect-grid) */
+    linear-gradient(rgba(51, 170, 51, calc(0.04 * var(--effect-grid))) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(51, 170, 51, calc(0.04 * var(--effect-grid))) 1px, transparent 1px),
+    /* Coarse grid (gated by --effect-grid) */
+    linear-gradient(rgba(51, 170, 51, calc(0.025 * var(--effect-grid))) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(51, 170, 51, calc(0.025 * var(--effect-grid))) 1px, transparent 1px),
+    /* Radial vignette */
+    radial-gradient(ellipse at 50% 50%, var(--skin-vignette-center) 0%, var(--skin-vignette-mid) 50%, var(--skin-vignette-outer) 100%);
+  background-size:
+    20px 20px,
+    20px 20px,
+    100px 100px,
+    100px 100px,
+    100% 100%;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VIBES PANEL — Space Commander (kirokaze)
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-vibes {
+  min-height: 60px;
+  border-bottom: 1px solid var(--c-chrome-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Green tint overlay — blends GIF into kosmos palette ───── */
+
+.moltamp-vibes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--skin-vibes-tint);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ── Subtle scanline overlay ───────────────────────────────── */
+
+.moltamp-vibes::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--skin-vibes-scanline) 2px,
+    var(--skin-vibes-scanline) 4px
+  );
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+  box-shadow:
+    0 0 6px var(--c-chrome-accent),
+    0 0 12px var(--skin-orbit-glow-outer);
+  transform-origin: 4px 4px;
+  animation: orbit-rotate 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes orbit-rotate {
+  0%   { transform: rotate(0deg)   translateX(72px) translateY(0px)  scaleY(0.55); }
+  25%  { transform: rotate(90deg)  translateX(72px) translateY(0px)  scaleY(0.55); }
+  50%  { transform: rotate(180deg) translateX(72px) translateY(0px)  scaleY(0.55); }
+  75%  { transform: rotate(270deg) translateX(72px) translateY(0px)  scaleY(0.55); }
+  100% { transform: rotate(360deg) translateX(72px) translateY(0px)  scaleY(0.55); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LEFT PANEL — IntelPanel container (no pseudo-elements)
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-left {
+  width: 210px;
+  background: var(--skin-panel-bg);
+  border-right: 1px solid var(--c-chrome-border);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RIGHT PANEL — Hidden by default (Kosmos uses left + bottom)
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-right {
+  background: var(--skin-panel-bg);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM PANEL — Telemetry Ticker (Cyrillic)
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-bottom {
+  height: 30px;
+  background: var(--skin-panel-bg-deep);
+  border-top: 1px solid var(--c-chrome-border);
+  align-items: center;
+  padding: 0 16px;
+  gap: 24px;
+  font-size: 10px;
+  font-family: var(--font-terminal);
+  color: var(--c-chrome-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+
+.moltamp-panel-bottom::before {
+  content: '\0422\0420\0410\0421\0421\0410  \25CF  \041D\041E\041C\0418\041D\0410\041B\2003\2003\2003\0421\0418\0413\041D\0410\041B  \25B0\25B0\25B0\25B0\25B1\2003\2003\2003\041E\0420\0411\0418\0422\0410  408\041A\041C\2003\2003\2003\041F\0415\0420\0418\041E\0414  92.68\041C\2003\2003\2003\041D\0410\041A\041B\041E\041D  51.6\00B0\2003\2003\2003\0412\0418\0422\041E\041A  3\2003\2003\2003\0421\0412\042F\0417\042C  \0423\0421\0422\041E\0419\0427\0418\0412\0410\042F\2003\2003\2003\0422\0415\041B\0415\041C\0415\0422\0420\0418\042F  OK\2003\2003\2003\0426\0423\041F  \041C\041E\0421\041A\0412\0410\2003\2003\2003\041A\041E\0421\041C\041E\0421-2247';
+  color: var(--skin-ticker-dim);
+  white-space: nowrap;
+  animation: kosmos-ticker 45s linear infinite;
+  text-shadow: 0 0 4px var(--skin-amber-glow-10);
+}
+
+@keyframes kosmos-ticker {
+  0%   { transform: translateX(60%); }
+  100% { transform: translateX(-120%); }
+}
+
+.moltamp-panel-bottom::after {
+  content: '\25C6';
+  color: var(--c-chrome-accent);
+  font-size: 6px;
+  animation: kosmos-beacon 2.5s ease-in-out infinite;
+  margin-left: auto;
+  flex-shrink: 0;
+  text-shadow: 0 0 4px var(--skin-amber-glow-50);
+}
+
+@keyframes kosmos-beacon {
+  0%, 100% { opacity: 0.2; }
+  50%      { opacity: 1; }
+}
+
+/* ── REACTIVE: ticker activity ────────────────────────────────── */
+
+[data-activity="low"] .moltamp-panel-bottom::before {
+  color: var(--skin-ticker-low);
+}
+
+[data-activity="high"] .moltamp-panel-bottom::before {
+  color: var(--skin-ticker-high);
+  text-shadow: 0 0 6px var(--skin-amber-glow-15);
+}
+
+[data-activity="high"] .moltamp-panel-bottom::after {
+  animation: kosmos-beacon-fast 0.7s ease-in-out infinite;
+  color: var(--t-bright-yellow);
+}
+
+@keyframes kosmos-beacon-fast {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CRT EFFECTS — Heavy Soviet Tube Monitor
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-terminal.crt-active {
+  border-radius: 12px;
+}
+
+/* Heavy vignette — worn CRT edges */
+.moltamp-terminal.crt-active::before {
+  box-shadow:
+    inset 0 0 150px var(--skin-crt-shadow-heavy),
+    inset 0 0 60px var(--skin-crt-shadow-mid),
+    inset 0 0 20px var(--skin-crt-shadow-light);
+  border-radius: 12px;
+}
+
+/* Glow pulse — amber phosphor warmth */
+.moltamp-terminal.glow-active {
+  animation: kosmos-glow 5s ease-in-out infinite;
+}
+
+@keyframes kosmos-glow {
+  0%, 100% { box-shadow: inset 0 0 20px var(--skin-amber-glow-04); }
+  50%      { box-shadow: inset 0 0 40px var(--skin-amber-glow-08); }
+}
+
+/* REACTIVE glow */
+[data-activity="low"] .moltamp-terminal.glow-active {
+  box-shadow: inset 0 0 25px var(--skin-amber-glow-06);
+}
+
+[data-activity="high"] .moltamp-terminal.glow-active {
+  box-shadow: inset 0 0 35px var(--skin-amber-glow-12);
+  animation: kosmos-glow-hot 2s ease-in-out infinite;
+}
+
+@keyframes kosmos-glow-hot {
+  0%, 100% { box-shadow: inset 0 0 30px var(--skin-amber-glow-08); }
+  50%      { box-shadow: inset 0 0 50px var(--skin-amber-glow-15); }
+}
+
+/* ── Horizontal scan line sweep ───────────────────────────────── */
+
+.moltamp-terminal::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--skin-amber-glow-08);
+  z-index: 12;
+  animation: kosmos-scan 10s linear infinite;
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+}
+
+@keyframes kosmos-scan {
+  0%   { top: -2px; opacity: 0; }
+  3%   { opacity: var(--effect-scanlines); }
+  97%  { opacity: var(--effect-scanlines); }
+  100% { top: 100%; opacity: 0; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CHROME — Titlebar, Statusbar
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-titlebar {
+  background: linear-gradient(180deg, var(--skin-titlebar-top) 0%, var(--c-chrome-bg) 100%);
+  text-shadow: 0 0 4px var(--skin-amber-glow-15);
+}
+
+.moltamp-statusbar {
+  background: var(--skin-panel-bg-deep);
+  text-shadow: 0 0 3px var(--skin-amber-glow-10);
+  border-top: 1px solid var(--c-chrome-border);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SKIN BROWSER
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-skin-overlay {
+  background: var(--skin-overlay-bg);
+}
+
+.moltamp-skin-panel {
+  border-color: var(--c-chrome-border);
+  box-shadow: 0 0 40px var(--skin-amber-glow-04);
+}
+
+.moltamp-skin-card.active {
+  border-color: var(--c-chrome-accent);
+  box-shadow: 0 0 8px var(--skin-amber-glow-15);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   REACTIVE — Orbital Display (vibes panel)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Vibes react to activity */
+[data-activity="high"] .moltamp-vibes {
+  filter: brightness(1.1) saturate(1.1);
+  animation: kosmos-vibes-glow 2s ease-in-out infinite;
+}
+
+@keyframes kosmos-vibes-glow {
+  0%, 100% { box-shadow: inset 0 0 20px var(--skin-green-glow-05); }
+  50% { box-shadow: inset 0 0 40px var(--skin-green-glow-15); }
+}

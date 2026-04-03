@@ -1,0 +1,17 @@
+{
+  "id": "biodiagnostic",
+  "name": "Biodiagnostic",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Medical HUD. Vital signs. Heartbeat waveform. The terminal is alive.",
+  "engine": "1.0",
+  "effects": {
+    "scanlines": true,
+    "glow": true
+  },
+  "vibes": {
+    "slots": [
+      { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
+    ]
+  }
+}

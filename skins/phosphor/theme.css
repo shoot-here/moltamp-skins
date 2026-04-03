@@ -1,0 +1,181 @@
+/* ═══════════════════════════════════════════════════════════════
+   PHOSPHOR — Green CRT Terminal
+
+   Full monochrome green. Heavy scanlines. CRT glow.
+   Animated grid decay in the background.
+   Feels like hacking in 1983.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Terminal — pure green monochrome */
+  --t-foreground:    #00ff41;
+  --t-background:    #040a04;
+  --t-cursor:        #00ff41;
+  --t-cursor-accent: #040a04;
+  --t-selection:     rgba(0, 255, 65, 0.2);
+
+  --t-black:    #0a140a;
+  --t-red:      #00cc33;
+  --t-green:    #00ff41;
+  --t-yellow:   #66ff88;
+  --t-blue:     #009922;
+  --t-magenta:  #44ee99;
+  --t-cyan:     #88ffbb;
+  --t-white:    #00ff41;
+
+  --t-bright-black:    #1a2e1a;
+  --t-bright-red:      #22dd55;
+  --t-bright-green:    #44ff77;
+  --t-bright-yellow:   #88ffaa;
+  --t-bright-blue:     #11bb44;
+  --t-bright-magenta:  #66ffaa;
+  --t-bright-cyan:     #aaffcc;
+  --t-bright-white:    #ccffdd;
+
+  /* Chrome */
+  --c-chrome-bg:       #020602;
+  --c-chrome-text:     #00aa2a;
+  --c-chrome-border:   #003d11;
+  --c-chrome-accent:   #00ff41;
+  --c-chrome-dim:      #006b1d;
+  --c-chrome-hover:    #0a1f0a;
+
+  /* Effects — everything on */
+  --effect-scanlines: 1;
+  --effect-glow:      1;
+  --effect-crt:       1;
+  --scanline-opacity: 0.06;
+  --glow-intensity:   20px;
+  --c-glow:           rgba(0, 255, 65, 0.12);
+
+  /* Typography */
+  --font-terminal: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+/* ── Animated Background Grid ────────────────────────────────── */
+
+.moltamp-shell {
+  background:
+    linear-gradient(rgba(0, 255, 65, calc(0.03 * var(--effect-grid))) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 65, calc(0.03 * var(--effect-grid))) 1px, transparent 1px),
+    var(--c-chrome-bg);
+  background-size: 20px 20px;
+  animation: grid-drift 20s linear infinite;
+}
+
+@keyframes grid-drift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 20px; }
+}
+
+/* ── CRT Curvature + Vignette ────────────────────────────────── */
+
+.moltamp-terminal.crt-active {
+  border-radius: 16px;
+}
+
+.moltamp-terminal.crt-active::before {
+  box-shadow:
+    inset 0 0 120px rgba(0, 0, 0, 0.5),
+    inset 0 0 40px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+}
+
+/* ── Glow Pulse ──────────────────────────────────────────────── */
+
+.moltamp-terminal.glow-active {
+  animation: phosphor-pulse 4s ease-in-out infinite;
+}
+
+@keyframes phosphor-pulse {
+  0%, 100% { box-shadow: inset 0 0 15px rgba(0, 255, 65, 0.06); }
+  50%      { box-shadow: inset 0 0 30px rgba(0, 255, 65, 0.12); }
+}
+
+/* ── Title Bar — green monochrome ────────────────────────────── */
+
+.moltamp-titlebar {
+  text-shadow: 0 0 6px rgba(0, 255, 65, calc(0.3 * var(--effect-text-glow)));
+}
+
+/* ── Status Bar — subtle glow ────────────────────────────────── */
+
+.moltamp-statusbar {
+  text-shadow: 0 0 4px rgba(0, 255, 65, calc(0.2 * var(--effect-text-glow)));
+  border-top-color: rgba(0, 255, 65, 0.08);
+}
+
+/* ── Skin Cards — green theme ────────────────────────────────── */
+
+.moltamp-skin-card.active {
+  border-color: #00ff41;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.15);
+}
+
+.moltamp-skin-overlay {
+  background: rgba(0, 4, 0, 0.85);
+}
+
+.moltamp-skin-panel {
+  border-color: #003d11;
+  box-shadow: 0 0 40px rgba(0, 255, 65, 0.08);
+}
+
+/* ── Vibes Banner — Matrix rain ─────────────────────────────── */
+
+.moltamp-vibes {
+  min-height: 60px;
+  border-bottom: 1px solid #003d11;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Green tint overlay — blends GIF into phosphor palette ──── */
+
+.moltamp-vibes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 4, 0, 0.25);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ── Scanline overlay on vibes ──────────────────────────────── */
+
+.moltamp-vibes::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 4, 0, 0.12) 2px,
+    rgba(0, 4, 0, 0.12) 4px
+  );
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+}
+
+/* ── Flickering scan line at bottom ──────────────────────────── */
+
+.moltamp-terminal::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(0, 255, 65, 0.15);
+  z-index: 12;
+  animation: scan-sweep 8s linear infinite;
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+}
+
+@keyframes scan-sweep {
+  0%   { top: -2px; opacity: 0; }
+  5%   { opacity: var(--effect-scanlines); }
+  95%  { opacity: var(--effect-scanlines); }
+  100% { top: 100%; opacity: 0; }
+}

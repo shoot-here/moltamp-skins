@@ -1,0 +1,17 @@
+{
+  "id": "deep-space",
+  "name": "Deep Space",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Sci-fi cockpit. Radar, waveforms, wireframe globe. The terminal is one panel in a larger bridge.",
+  "engine": "1.0",
+  "effects": {
+    "scanlines": true,
+    "glow": true
+  },
+  "vibes": {
+    "slots": [
+      { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
+    ]
+  }
+}

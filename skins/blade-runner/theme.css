@@ -1,0 +1,340 @@
+/* ═══════════════════════════════════════════════════════════════
+   BLADE RUNNER — Voight-Kampff Terminal
+
+   Amber monochrome. Dithered imagery. Dossier panels.
+   "Have you ever retired a human by mistake?"
+
+   Layout: vibes (top) → [left info | terminal | right info] → bottom
+   Assets: eye-scan.svg, fingerprint.svg, circuit-grid.svg, waveform.svg
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Terminal — warm amber on near-black */
+  --t-foreground:    #d4a054;
+  --t-background:    #0a0800;
+  --t-cursor:        #ffaa44;
+  --t-cursor-accent: #0a0800;
+  --t-selection:     rgba(255, 170, 68, 0.15);
+
+  --t-black:    #0a0800;
+  --t-red:      #ee6633;
+  --t-green:    #aa8833;
+  --t-yellow:   #ffcc66;
+  --t-blue:     #775522;
+  --t-magenta:  #cc7744;
+  --t-cyan:     #ddaa44;
+  --t-white:    #d4a054;
+
+  --t-bright-black:    #1a1400;
+  --t-bright-red:      #ff8844;
+  --t-bright-green:    #ccaa55;
+  --t-bright-yellow:   #ffe088;
+  --t-bright-blue:     #997733;
+  --t-bright-magenta:  #ddaa66;
+  --t-bright-cyan:     #eebb55;
+  --t-bright-white:    #ffe0a0;
+
+  /* Chrome */
+  --c-chrome-bg:       #080600;
+  --c-chrome-text:     #aa8833;
+  --c-chrome-border:   #221800;
+  --c-chrome-accent:   #ffaa44;
+  --c-chrome-dim:      #554411;
+  --c-chrome-hover:    #110c00;
+  --c-glow:            rgba(255, 170, 68, 0.06);
+
+  /* Effects */
+  --effect-scanlines:  1;
+  --effect-glow:       1;
+  --effect-crt:        1;
+  --scanline-opacity:  0.04;
+  --glow-intensity:    10px;
+
+  /* Fonts */
+  --font-terminal: 'SF Mono', 'JetBrains Mono', monospace;
+  --font-chrome:   'SF Pro Display', 'Inter', -apple-system, sans-serif;
+
+  /* Layout */
+  --radius:           2px;
+  --chrome-height:    38px;
+  --statusbar-height: 28px;
+
+  /* Skin-Local */
+  --skin-bar-bg:            #060400;
+  --skin-border-subtle:     #221800;
+  --skin-panel-bg:          #050300;
+  --skin-error-border:      #cc4422;
+  --skin-amber-accent:      #ffaa44;
+  --skin-user-border:       #cc8833;
+  --skin-user-text:         #ffcc66;
+  --skin-assistant-text:    #d4a054;
+  --skin-inset-bg:          #0c0a00;
+  --skin-dim-accent:        #886622;
+  --skin-thinking-border:   #1a1200;
+  --skin-input-bg:          #0a0800;
+  --skin-input-border:      #332200;
+  --skin-scrollbar-hover:   #443300;
+  --skin-overlay-dark:      rgba(10, 8, 0, 0.25);
+  --skin-scanline-dark:     rgba(10, 8, 0, 0.12);
+  --skin-glow-faint:        rgba(255, 170, 68, 0.05);
+  --skin-glow-soft:         rgba(255, 170, 68, 0.15);
+  --skin-glow-medium:       rgba(255, 170, 68, 0.2);
+  --skin-scanline-crt:      rgba(10, 8, 0, 0.08);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SHELL & CHROME
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-shell {
+  background: var(--t-background);
+}
+
+.moltamp-titlebar {
+  background: var(--skin-bar-bg);
+  border-bottom: 1px solid var(--skin-border-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.moltamp-statusbar {
+  background: var(--skin-bar-bg);
+  border-top: 1px solid var(--skin-border-subtle);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VIBES — Top banner: Eye Scan + Circuit Grid + Dossier Art
+
+   The hero panel. Pure skin canvas. GIFs, animations,
+   eye candy. This is the mood.
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-vibes {
+  min-height: 60px;
+  border-bottom: 1px solid var(--skin-border-subtle);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Amber tint overlay — blends GIF into skin palette ─────── */
+
+.moltamp-vibes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--skin-overlay-dark);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ── Scanline overlay on vibes ─────────────────────────────── */
+
+.moltamp-vibes::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--skin-scanline-dark) 2px,
+    var(--skin-scanline-dark) 4px
+  );
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+}
+
+@keyframes eye-pulse {
+  0%, 100% { opacity: 0.7; filter: brightness(0.8); }
+  50% { opacity: 1; filter: brightness(1.1); }
+}
+
+@keyframes circuit-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 300px 300px; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   VIBES — Activity Reactions
+
+   data-activity: idle | low | high
+   data-shell-state: idle | thinking | streaming | tool-use |
+                     permission | error | complete
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── High: vivid, glowing ──────────────────────────────────── */
+
+[data-activity="high"] .moltamp-vibes {
+  filter: brightness(1.1) saturate(1.1);
+  animation: vibes-glow 2s ease-in-out infinite;
+}
+
+@keyframes vibes-glow {
+  0%, 100% { box-shadow: inset 0 0 20px var(--skin-glow-faint); }
+  50% { box-shadow: inset 0 0 40px var(--skin-glow-soft); }
+}
+
+/* ── Thinking: subtle pulse ────────────────────────────────── */
+
+[data-shell-state="thinking"] .moltamp-vibes {
+  animation: vibes-think 1.5s ease-in-out infinite;
+}
+
+@keyframes vibes-think {
+  0%, 100% { filter: brightness(0.7); }
+  50% { filter: brightness(1); }
+}
+
+/* ── Error: red flash ──────────────────────────────────────── */
+
+[data-shell-state="error"] .moltamp-vibes {
+  border-bottom-color: var(--skin-error-border);
+  animation: vibes-error 0.5s step-end infinite;
+}
+
+@keyframes vibes-error {
+  0%, 100% { filter: brightness(1) hue-rotate(-15deg); }
+  50% { filter: brightness(0.4) hue-rotate(-15deg); }
+}
+
+/* ── Permission: amber alert ───────────────────────────────── */
+
+[data-shell-state="permission"] .moltamp-vibes {
+  border-bottom-color: var(--skin-amber-accent);
+  animation: vibes-perm 1s ease-in-out infinite;
+}
+
+@keyframes vibes-perm {
+  0%, 100% { filter: brightness(0.8); }
+  50% { filter: brightness(1.2); box-shadow: inset 0 0 30px var(--skin-glow-medium); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LEFT PANEL — Intel tabs (events, agents, git)
+
+   No pseudo-element hijacking. Just themed colors.
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-left {
+  background: var(--skin-panel-bg);
+  border-right: 1px solid var(--skin-border-subtle);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RIGHT PANEL — Signal telemetry
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-right {
+  background: var(--skin-panel-bg);
+  border-left: 1px solid var(--skin-border-subtle);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM PANEL — Scrolling waveform
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-bottom {
+  background-image: url('./assets/waveform.svg');
+  background-size: 200% 100%;
+  background-repeat: repeat-x;
+  background-position: 0 center;
+  animation: waveform-scroll 20s linear infinite;
+}
+
+[data-activity="high"] .moltamp-panel-bottom {
+  animation: waveform-scroll 6s linear infinite;
+  filter: brightness(1.3);
+}
+
+[data-activity="low"] .moltamp-panel-bottom {
+  animation: waveform-scroll 12s linear infinite;
+}
+
+@keyframes waveform-scroll {
+  0% { background-position: 0 center; }
+  100% { background-position: -400px center; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TERMINAL — Monochrome amber text
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-terminal {
+  background: var(--t-background);
+}
+
+.moltamp-message-user {
+  border-left: 2px solid var(--skin-user-border);
+  color: var(--skin-user-text);
+}
+
+.moltamp-message-assistant {
+  color: var(--skin-assistant-text);
+}
+
+.moltamp-tool-call {
+  background: var(--skin-inset-bg);
+  border: 1px solid var(--skin-border-subtle);
+  border-left: 2px solid var(--skin-dim-accent);
+}
+
+.moltamp-thinking {
+  background: var(--skin-inset-bg);
+  border: 1px solid var(--skin-thinking-border);
+  color: var(--skin-dim-accent);
+}
+
+.moltamp-code-block {
+  background: var(--skin-inset-bg);
+  border: 1px solid var(--skin-border-subtle);
+}
+
+.moltamp-input {
+  background: var(--skin-input-bg);
+  border: 1px solid var(--skin-input-border);
+  color: var(--skin-user-text);
+  caret-color: var(--skin-amber-accent);
+}
+
+.moltamp-input:focus {
+  border-color: var(--skin-amber-accent);
+  box-shadow: 0 0 8px var(--skin-glow-soft);
+}
+
+/* Scrollbar */
+.moltamp-terminal::-webkit-scrollbar { width: 6px; }
+.moltamp-terminal::-webkit-scrollbar-track { background: var(--skin-bar-bg); }
+.moltamp-terminal::-webkit-scrollbar-thumb { background: var(--skin-input-border); border-radius: 3px; }
+.moltamp-terminal::-webkit-scrollbar-thumb:hover { background: var(--skin-scrollbar-hover); }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CRT / SCANLINE OVERLAY — Blade Runner film grain
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-shell::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--skin-scanline-crt) 2px,
+    var(--skin-scanline-crt) 4px
+  );
+  mix-blend-mode: multiply;
+  opacity: var(--effect-scanlines);
+}

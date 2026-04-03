@@ -1,0 +1,12 @@
+{
+  "id": "lunar",
+  "name": "Lunar",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Blood red monochrome. Moon phases. The terminal glows like a dying star.",
+  "engine": "1.0",
+  "effects": {
+    "scanlines": true,
+    "glow": true
+  }
+}

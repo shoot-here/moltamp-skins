@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" width="400" height="80">
+  <defs>
+    <filter id="wf-glow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="wf-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffaa44" stop-opacity="0.1"/>
+      <stop offset="20%" stop-color="#ffaa44" stop-opacity="0.8"/>
+      <stop offset="80%" stop-color="#ffaa44" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ffaa44" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="80" fill="#060400"/>
+
+  <!-- Grid lines -->
+  <g stroke="#1a1200" stroke-width="0.5">
+    <line x1="0" y1="20" x2="400" y2="20"/>
+    <line x1="0" y1="40" x2="400" y2="40"/>
+    <line x1="0" y1="60" x2="400" y2="60"/>
+    <line x1="50" y1="0" x2="50" y2="80"/>
+    <line x1="100" y1="0" x2="100" y2="80"/>
+    <line x1="150" y1="0" x2="150" y2="80"/>
+    <line x1="200" y1="0" x2="200" y2="80"/>
+    <line x1="250" y1="0" x2="250" y2="80"/>
+    <line x1="300" y1="0" x2="300" y2="80"/>
+    <line x1="350" y1="0" x2="350" y2="80"/>
+  </g>
+
+  <!-- Center line -->
+  <line x1="0" y1="40" x2="400" y2="40" stroke="#332200" stroke-width="1"/>
+
+  <!-- Waveform — voice stress analysis pattern -->
+  <polyline
+    fill="none"
+    stroke="url(#wf-fade)"
+    stroke-width="1.5"
+    filter="url(#wf-glow)"
+    points="
+      0,40 10,40 15,38 20,35 25,28 28,22 30,15 32,22 35,32 38,38 40,40
+      45,40 50,42 55,45 58,50 60,55 62,60 65,55 68,48 70,42 72,40
+      80,40 85,38 88,30 90,20 92,12 94,8 96,12 98,22 100,32 102,38 105,40
+      110,40 115,42 120,45 122,52 124,58 126,62 128,58 130,50 132,44 135,40
+      140,40 145,38 148,34 150,25 152,18 154,10 156,5 158,10 160,20 162,30 165,38 168,40
+      175,40 180,42 185,48 188,55 190,60 192,65 194,60 196,52 198,45 200,40
+      205,40 210,38 215,32 218,24 220,16 222,10 224,16 226,26 228,34 230,38 235,40
+      240,40 245,42 248,46 250,52 252,56 254,60 256,56 258,50 260,44 262,40
+      268,40 272,36 275,28 278,20 280,14 282,8 284,14 286,24 288,34 290,38 295,40
+      300,40 305,42 308,48 310,54 312,58 314,62 316,58 318,50 320,44 322,40
+      328,40 332,37 335,30 338,22 340,16 342,10 344,16 346,24 348,33 350,38 355,40
+      360,40 365,41 370,44 375,48 378,52 380,55 382,52 384,46 386,42 390,40 400,40
+    "
+  />
+
+  <!-- Labels -->
+  <text x="5" y="12" font-family="monospace" font-size="6" fill="#553300">STRESS ANALYSIS</text>
+  <text x="340" y="12" font-family="monospace" font-size="6" fill="#cc8833">ELEVATED</text>
+  <text x="5" y="76" font-family="monospace" font-size="5" fill="#332200">VK-RESPONSE // CH.4</text>
+</svg>

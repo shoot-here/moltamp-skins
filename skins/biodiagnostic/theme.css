@@ -1,0 +1,496 @@
+/*
+ * BIODIAGNOSTIC — Medical HUD / Body Scan Interface
+ * Teal/aqua monochrome. Heartbeat waveform. Vital signs. Scanning.
+ */
+
+/* ============================================================
+   1. ROOT VARIABLES
+   ============================================================ */
+
+:root {
+  /* --- Terminal palette --- */
+  --t-foreground: #b0e8dc;
+  --t-background: #040a0a;
+  --t-cursor: #00ffcc;
+  --t-cursor-accent: #040a0a;
+  --t-selection: rgba(0, 204, 170, 0.18);
+
+  --t-black:   #0a1412;
+  --t-red:     #cc4444;
+  --t-green:   #00cc88;
+  --t-yellow:  #ccaa00;
+  --t-blue:    #2299aa;
+  --t-magenta: #669999;
+  --t-cyan:    #00ccaa;
+  --t-white:   #b0e8dc;
+
+  --t-bright-black:   #1a2e28;
+  --t-bright-red:     #ff5555;
+  --t-bright-green:   #00ffaa;
+  --t-bright-yellow:  #ffcc00;
+  --t-bright-blue:    #33ccdd;
+  --t-bright-magenta: #88bbbb;
+  --t-bright-cyan:    #00ffcc;
+  --t-bright-white:   #d4fff0;
+
+  /* --- Chrome --- */
+  --c-chrome-bg:      #060e0c;
+  --c-chrome-text:    #6aaa98;
+  --c-chrome-border:  #0d2620;
+  --c-chrome-accent:  #00ccaa;
+  --c-chrome-dim:     #2a4a40;
+  --c-chrome-hover:   #0a1e18;
+  --c-glow:           #00ffcc;
+
+  /* --- Fonts --- */
+  --font-terminal: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  --font-chrome:   'Inter', 'SF Pro Display', -apple-system, sans-serif;
+
+  /* --- Effects --- */
+  --effect-scanlines: 1;
+  --effect-glow:      1;
+  --effect-crt:       0;
+  --scanline-opacity: 0.03;
+  --glow-intensity:   0.5;
+
+  /* --- Layout --- */
+  --radius:           4px;
+  --chrome-height:    38px;
+  --statusbar-height: 28px;
+
+  /* --- Skin-specific --- */
+  --bio-teal:       #00ccaa;
+  --bio-teal-light: #00ffcc;
+  --bio-teal-dim:   #00664d;
+  --bio-amber:      #ccaa00;
+  --bio-green:      #00cc88;
+  --bio-dark:       #040a0a;
+  --bio-panel-bg:   #050c0a;
+}
+
+
+/* ============================================================
+   2. SHELL & CHROME
+   ============================================================ */
+
+.moltamp-shell {
+  background: var(--t-background);
+}
+
+.moltamp-titlebar {
+  background: var(--c-chrome-bg);
+  border-bottom: 1px solid var(--c-chrome-border);
+  color: var(--c-chrome-text);
+  font-family: var(--font-chrome);
+  height: var(--chrome-height);
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle top-edge glow */
+.moltamp-titlebar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--bio-teal) 20%,
+    var(--bio-teal-light) 50%,
+    var(--bio-teal) 80%,
+    transparent 100%
+  );
+  opacity: 0.4;
+}
+
+.moltamp-statusbar {
+  background: var(--c-chrome-bg);
+  border-top: 1px solid var(--c-chrome-border);
+  color: var(--c-chrome-dim);
+  font-family: var(--font-chrome);
+  font-size: 11px;
+  height: var(--statusbar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  position: relative;
+}
+
+.moltamp-statusbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--bio-teal-dim) 30%,
+    var(--bio-teal) 50%,
+    var(--bio-teal-dim) 70%,
+    transparent 100%
+  );
+  opacity: 0.3;
+}
+
+
+/* ============================================================
+   3. TERMINAL
+   ============================================================ */
+
+.moltamp-terminal {
+  font-family: var(--font-terminal);
+  background: var(--t-background);
+  color: var(--t-foreground);
+}
+
+/* Glow effect */
+.moltamp-terminal.glow-active {
+  text-shadow:
+    0 0 2px rgba(0, 255, 204, calc(0.15 * var(--glow-intensity))),
+    0 0 8px rgba(0, 255, 204, calc(0.06 * var(--glow-intensity)));
+}
+
+/* CRT barrel + vignette */
+.moltamp-terminal.crt-active {
+  border-radius: 6px;
+}
+
+/* Scanlines overlay */
+.moltamp-terminal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 204, var(--scanline-opacity)) 2px,
+    rgba(0, 255, 204, var(--scanline-opacity)) 4px
+  );
+  opacity: var(--effect-scanlines);
+}
+
+
+/* ============================================================
+   4. LEFT PANEL — Simple styling (IntelPanel lives here)
+   ============================================================ */
+
+.moltamp-panel-left {
+  background: var(--bio-panel-bg) !important;
+  border-right: 1px solid var(--c-chrome-border);
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* GIF layer behind content */
+.moltamp-panel-left::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('./assets/transporter.gif') center bottom / contain no-repeat;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Keep tab content above the GIF */
+.moltamp-panel-left > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* ============================================================
+   4b. VIBES BANNER — Medical diagnostic GIFs
+
+   4 assets cycle by state:
+     Default:  arm-diagnostic.gif (wireframe medical scan)
+     Thinking: transporter.gif (body scan chamber)
+     Tool use: portrait-scan.gif (dithered face scan)
+     Error:    glitch-angel.gif (corrupted data)
+   ============================================================ */
+
+.moltamp-vibes {
+  min-height: 60px;
+  border-bottom: 1px solid var(--c-chrome-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Teal tint overlay */
+.moltamp-vibes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 10, 10, 0.15);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* Scanlines */
+.moltamp-vibes::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(4, 10, 10, 0.08) 2px,
+    rgba(4, 10, 10, 0.08) 4px
+  );
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+}
+
+/* Activity states */
+[data-activity="high"] .moltamp-vibes {
+  filter: brightness(1.1) saturate(1.15);
+  animation: bio-vibes-glow 2s ease-in-out infinite;
+}
+
+@keyframes bio-vibes-glow {
+  0%, 100% { box-shadow: inset 0 0 20px rgba(0, 204, 170, 0.05); }
+  50% { box-shadow: inset 0 0 40px rgba(0, 204, 170, 0.15); }
+}
+
+/* Thinking: pulse the arm scan */
+[data-shell-state="thinking"] .moltamp-vibes {
+  animation: bio-think 1.5s ease-in-out infinite;
+}
+
+@keyframes bio-think {
+  0%, 100% { filter: brightness(0.7); }
+  50% { filter: brightness(1.1); }
+}
+
+/* Error: glitch flash on vibes */
+[data-shell-state="error"] .moltamp-vibes {
+  filter: brightness(1.2) saturate(1.3);
+}
+
+/* Active: panels glow brighter */
+[data-activity="high"] .moltamp-panel-left::after,
+[data-activity="high"] .moltamp-panel-right::before {
+  opacity: 0.5;
+}
+
+[data-activity="idle"] .moltamp-panel-left::after,
+[data-activity="idle"] .moltamp-panel-right::before {
+  opacity: 0.85;
+}
+
+
+/* ============================================================
+   5. RIGHT PANEL — Portrait scan behind signal data
+   ============================================================ */
+
+.moltamp-panel-right {
+  background:
+    url('./assets/portrait-scan.gif') center center / contain no-repeat,
+    var(--bio-panel-bg);
+  background-blend-mode: screen;
+  border-left: 1px solid var(--c-chrome-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dim overlay so signal text stays readable */
+.moltamp-panel-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bio-panel-bg);
+  opacity: 0.65;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scanning line sweeps over the portrait */
+.moltamp-panel-right::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--bio-teal-light);
+  box-shadow:
+    0 0 8px 2px var(--bio-teal-light),
+    0 0 20px 4px rgba(0, 255, 204, 0.3);
+  animation: scan-sweep 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes scan-sweep {
+  0%   { top: 24px; opacity: 0.3; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: calc(100% - 4px); opacity: 0.3; }
+}
+
+/* Keep signal content above backgrounds */
+.moltamp-panel-right > * {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* ============================================================
+   6. BOTTOM PANEL — VITAL SIGN TELEMETRY
+   ============================================================ */
+
+.moltamp-panel-bottom {
+  height: 24px;
+  background: var(--bio-panel-bg);
+  border-top: 1px solid var(--c-chrome-border);
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+}
+
+/* Scrolling telemetry text */
+.moltamp-panel-bottom::before {
+  content:
+    'SYS.NOMINAL  \00a0\00a0  HR: 72 BPM  \00a0\00a0  BP: 118/76  \00a0\00a0  SpO2: 98%  \00a0\00a0  TEMP: 36.6\00b0C  \00a0\00a0  RR: 16  \00a0\00a0  EtCO2: 38  \00a0\00a0  NEURAL: ACTIVE  \00a0\00a0  CORTISOL: 12.4  \00a0\00a0  BIO.SCAN: COMPLETE  \00a0\00a0  IMMUNE: NOMINAL  \00a0\00a0  METABOLIC: OPTIMAL  \00a0\00a0  SYS.NOMINAL  \00a0\00a0  HR: 72 BPM  \00a0\00a0  BP: 118/76  \00a0\00a0  SpO2: 98%  \00a0\00a0  TEMP: 36.6\00b0C  \00a0\00a0  RR: 16  \00a0\00a0  EtCO2: 38  \00a0\00a0  NEURAL: ACTIVE  \00a0\00a0  CORTISOL: 12.4  \00a0\00a0  BIO.SCAN: COMPLETE  \00a0\00a0  IMMUNE: NOMINAL  \00a0\00a0  METABOLIC: OPTIMAL';
+  font-family: var(--font-terminal);
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--bio-teal-dim);
+  white-space: nowrap;
+  animation: telemetry-scroll 30s linear infinite;
+  position: absolute;
+}
+
+@keyframes telemetry-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Nominal indicator dot */
+.moltamp-panel-bottom::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bio-green);
+  box-shadow: 0 0 6px var(--bio-green);
+  animation: status-blink 3s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes status-blink {
+  0%, 90%, 100% { opacity: 1; }
+  95% { opacity: 0.3; }
+}
+
+
+/* ============================================================
+   7. HEARTBEAT PULSING GLOW
+   ============================================================ */
+
+/* Double-pulse heartbeat rhythm on the whole shell border */
+@keyframes heartbeat-glow {
+  0%   { box-shadow: inset 0 0 0 0 transparent; }
+  /* First beat */
+  8%   { box-shadow: inset 0 0 30px -10px rgba(0, 255, 204, 0.08); }
+  16%  { box-shadow: inset 0 0 0 0 transparent; }
+  /* Second beat */
+  22%  { box-shadow: inset 0 0 20px -10px rgba(0, 255, 204, 0.05); }
+  30%  { box-shadow: inset 0 0 0 0 transparent; }
+  /* Long pause */
+  100% { box-shadow: inset 0 0 0 0 transparent; }
+}
+
+.moltamp-shell {
+  animation: heartbeat-glow 1.6s ease-in-out infinite;
+}
+
+
+/* ============================================================
+   8. SKIN BROWSER / OVERLAY
+   ============================================================ */
+
+.moltamp-skin-overlay {
+  background: rgba(4, 10, 10, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.moltamp-skin-panel {
+  background: var(--c-chrome-bg);
+  border: 1px solid var(--c-chrome-border);
+  border-radius: var(--radius);
+  color: var(--c-chrome-text);
+  font-family: var(--font-chrome);
+}
+
+.moltamp-skin-card {
+  background: rgba(0, 204, 170, 0.03);
+  border: 1px solid var(--c-chrome-border);
+  border-radius: var(--radius);
+  color: var(--c-chrome-text);
+  transition: all 0.2s ease;
+}
+
+.moltamp-skin-card:hover {
+  background: rgba(0, 204, 170, 0.06);
+  border-color: var(--bio-teal-dim);
+}
+
+.moltamp-skin-card.active {
+  background: rgba(0, 204, 170, 0.08);
+  border-color: var(--bio-teal);
+  box-shadow:
+    0 0 12px -4px rgba(0, 255, 204, 0.15),
+    inset 0 0 8px -4px rgba(0, 255, 204, 0.05);
+}
+
+
+/* ============================================================
+   9. SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--t-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--c-chrome-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bio-teal-dim);
+}
+
+
+/* ============================================================
+   10. SELECTION & FOCUS
+   ============================================================ */
+
+::selection {
+  background: rgba(0, 204, 170, 0.2);
+  color: var(--t-bright-white);
+}
+
+*:focus-visible {
+  outline: 1px solid var(--bio-teal);
+  outline-offset: 1px;
+}

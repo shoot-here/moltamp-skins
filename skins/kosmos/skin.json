@@ -1,0 +1,19 @@
+{
+  "id": "kosmos",
+  "name": "Kosmos",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Soviet mission control. Amber on dark green. Orbital trajectories. Utilitarian and beautiful.",
+  "engine": "1.0",
+  "effects": {
+    "scanlines": true,
+    "glow": true,
+    "crt": true,
+    "grid": true
+  },
+  "vibes": {
+    "slots": [
+      { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
+    ]
+  }
+}

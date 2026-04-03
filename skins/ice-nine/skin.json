@@ -1,0 +1,17 @@
+{
+  "id": "ice-nine",
+  "name": "Ice Nine",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Cold blue terminal. Frosted glass edges. Breathing cyan glow. Everything crystallizes.",
+  "engine": "1.0",
+  "effects": {
+    "scanlines": true,
+    "glow": true
+  },
+  "vibes": {
+    "slots": [
+      { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
+    ]
+  }
+}

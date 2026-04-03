@@ -1,0 +1,422 @@
+/* ═══════════════════════════════════════════════════════════════
+   LCARS — Federation Starship Console
+
+   Inspired by the Library Computer Access/Retrieval System
+   aboard Galaxy-class starships. Warm peach, gold, lavender,
+   and blue pill-shaped control surfaces on a dark background.
+
+   All visuals are pure CSS — no images, no imports.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Terminal — warm cream on deep space black */
+  --t-foreground:    #FFCC99;
+  --t-background:    #0a0a12;
+  --t-cursor:        #FF9966;
+  --t-cursor-accent: #0a0a12;
+  --t-selection:     rgba(255, 153, 102, 0.18);
+
+  --t-black:    #12121e;
+  --t-red:      #FF9999;
+  --t-green:    #99FF99;
+  --t-yellow:   #FFCC99;
+  --t-blue:     #9999FF;
+  --t-magenta:  #CC99FF;
+  --t-cyan:     #99CCFF;
+  --t-white:    #FFCC99;
+
+  --t-bright-black:    #2a2a3a;
+  --t-bright-red:      #FFBBBB;
+  --t-bright-green:    #BBFFBB;
+  --t-bright-yellow:   #FFE0BB;
+  --t-bright-blue:     #BBBBFF;
+  --t-bright-magenta:  #DDBBFF;
+  --t-bright-cyan:     #BBDDFF;
+  --t-bright-white:    #FFE8D0;
+
+  /* Chrome */
+  --c-chrome-bg:       #0a0a12;
+  --c-chrome-text:     #CC99FF;
+  --c-chrome-border:   #2a1a3a;
+  --c-chrome-accent:   #FF9966;
+  --c-chrome-dim:      #4a3a5a;
+  --c-chrome-hover:    #1a1a2a;
+
+  /* Effects — subtle glow, no scanlines or CRT for the clean LCARS look */
+  --effect-scanlines:  0;
+  --effect-glow:       1;
+  --effect-crt:        0;
+  --scanline-opacity:  0;
+  --glow-intensity:    8px;
+  --c-glow:            rgba(255, 153, 102, 0.04);
+
+  --font-terminal: 'SF Mono', 'JetBrains Mono', monospace;
+  --font-chrome:   'SF Pro Display', 'Inter', -apple-system, sans-serif;
+
+  --radius:           20px;
+  --chrome-height:    38px;
+  --statusbar-height: 32px;
+
+  /* Skin-Local — LCARS palette */
+  --skin-lcars-peach:        #FF9966;
+  --skin-lcars-gold:         #FFCC99;
+  --skin-lcars-lavender:     #CC99FF;
+  --skin-lcars-blue:         #9999FF;
+  --skin-lcars-salmon:       #FF9999;
+  --skin-lcars-peach-muted:  #E88855;
+  --skin-lcars-gold-dim:     #DDbb77;
+  --skin-deep-space:         #0a0a12;
+  --skin-panel-bg:           #0e0e1a;
+  --skin-border-subtle:      #2a1a3a;
+  --skin-selection-text:     #FFE8D0;
+
+  --skin-shell-tint-blue:       rgba(153, 153, 255, 0.02);
+  --skin-shell-tint-lavender:   rgba(204, 153, 255, 0.02);
+  --skin-terminal-glow:         rgba(255, 153, 102, 0.03);
+  --skin-overlay-bg:            rgba(10, 10, 18, 0.92);
+  --skin-panel-glow:            rgba(204, 153, 255, 0.08);
+  --skin-panel-inset:           rgba(10, 10, 18, 0.5);
+  --skin-card-hover-glow:       rgba(255, 204, 153, 0.1);
+  --skin-card-active-glow:      rgba(255, 153, 102, 0.15);
+  --skin-card-active-glow-dim:  rgba(255, 153, 102, 0.05);
+  --skin-ambient-lavender:      rgba(204, 153, 255, 0.01);
+  --skin-ambient-peach:         rgba(255, 153, 102, 0.015);
+  --skin-ambient-blue:          rgba(153, 153, 255, 0.01);
+  --skin-selection-bg:          rgba(255, 153, 102, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SHELL — Deep space backdrop
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-shell {
+  background:
+    radial-gradient(ellipse at 30% 40%, var(--skin-shell-tint-blue) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, var(--skin-shell-tint-lavender) 0%, transparent 50%),
+    var(--skin-deep-space);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LEFT PANEL — LCARS Control Surface
+
+   Stacked pill-shaped bars in peach, gold, lavender, and blue.
+   The iconic LCARS sidebar with rounded rectangular modules.
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-left {
+  width: 180px;
+  background: var(--skin-deep-space);
+  border-right: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIBES BANNER — LCARS Control Surface (above the deck)
+
+   Stacked pill-shaped bars in peach, gold, lavender, and blue.
+   The iconic LCARS sidebar modules, displayed as a top banner.
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-vibes {
+  height: 120px;
+  position: relative;
+  overflow: hidden;
+  gap: 0;
+}
+
+/* Upper LCARS frame — tall pill bar with elbow curve */
+.moltamp-vibes::before {
+  content: '';
+  display: block;
+  width: 160px;
+  margin: 0 0 0 0;
+  flex-shrink: 0;
+  background:
+    /* Top pill bar — peach */
+    linear-gradient(180deg, var(--skin-lcars-peach) 0px, var(--skin-lcars-peach) 60px, transparent 60px) no-repeat 0 0 / 160px 60px,
+    /* Elbow curve connector */
+    radial-gradient(ellipse 80px 40px at 160px 60px, transparent 58%, var(--skin-lcars-peach) 60%, var(--skin-lcars-peach) 100%) no-repeat 0 20px / 160px 80px,
+    /* Second bar — gold */
+    linear-gradient(180deg, var(--skin-lcars-gold) 0px, var(--skin-lcars-gold) 40px, transparent 40px) no-repeat 0 108px / 140px 40px,
+    /* Third bar — lavender */
+    linear-gradient(180deg, var(--skin-lcars-lavender) 0px, var(--skin-lcars-lavender) 28px, transparent 28px) no-repeat 0 156px / 140px 28px,
+    /* Fourth bar — blue */
+    linear-gradient(180deg, var(--skin-lcars-blue) 0px, var(--skin-lcars-blue) 22px, transparent 22px) no-repeat 0 192px / 140px 22px,
+    /* Gap spacer */
+    transparent;
+  height: 222px;
+  border-radius: 0 40px 0 0;
+  position: relative;
+}
+
+/* Lower LCARS modules — stacked indicator blocks */
+.moltamp-vibes::after {
+  content: '';
+  display: block;
+  flex: 1;
+  width: 140px;
+  margin: 8px 0 0 0;
+  background:
+    /* Small status pill — salmon */
+    linear-gradient(180deg, var(--skin-lcars-salmon) 0px, var(--skin-lcars-salmon) 18px, transparent 18px) no-repeat 0 0 / 140px 18px,
+    /* Spacer */
+    linear-gradient(180deg, transparent 0px, transparent 8px, transparent 8px) no-repeat 0 18px / 140px 8px,
+    /* Medium block — peach */
+    linear-gradient(180deg, var(--skin-lcars-peach) 0px, var(--skin-lcars-peach) 32px, transparent 32px) no-repeat 0 26px / 140px 32px,
+    /* Spacer */
+    transparent 0 58px,
+    /* Thin line — gold */
+    linear-gradient(180deg, var(--skin-lcars-gold) 0px, var(--skin-lcars-gold) 14px, transparent 14px) no-repeat 0 66px / 140px 14px,
+    /* Spacer */
+    transparent 0 80px,
+    /* Block — lavender */
+    linear-gradient(180deg, var(--skin-lcars-lavender) 0px, var(--skin-lcars-lavender) 24px, transparent 24px) no-repeat 0 88px / 140px 24px,
+    /* Spacer */
+    transparent 0 112px,
+    /* Thin — blue */
+    linear-gradient(180deg, var(--skin-lcars-blue) 0px, var(--skin-lcars-blue) 14px, transparent 14px) no-repeat 0 120px / 140px 14px,
+    /* Tall block — peach muted */
+    linear-gradient(180deg, var(--skin-lcars-peach-muted) 0px, var(--skin-lcars-peach-muted) 50px, transparent 50px) no-repeat 0 142px / 140px 50px,
+    /* Block — gold dim */
+    linear-gradient(180deg, var(--skin-lcars-gold-dim) 0px, var(--skin-lcars-gold-dim) 30px, transparent 30px) no-repeat 0 200px / 140px 30px;
+  border-radius: 0 0 0 0;
+  animation: lcars-pulse-vibes 6s ease-in-out infinite;
+}
+
+@keyframes lcars-pulse-vibes {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.92; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM PANEL — LCARS Status Strip
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-bottom {
+  height: 44px;
+  background: var(--skin-deep-space);
+  border-top: none;
+  align-items: center;
+  padding: 0 0;
+  gap: 0;
+  font-size: 10px;
+  font-family: var(--font-chrome);
+  color: var(--skin-lcars-lavender);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+
+/* Left elbow + status readout */
+.moltamp-panel-bottom::before {
+  content: 'USS ENTERPRISE    NCC-1701-D    STARDATE 47988.1    MAIN POWER ● ONLINE    SHIELDS ● NOMINAL    WARP CORE ● STABLE';
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 20px 0 16px;
+  background: linear-gradient(90deg, var(--skin-lcars-lavender) 0px, var(--skin-lcars-lavender) 80px, var(--skin-lcars-blue) 80px, var(--skin-lcars-blue) 82px, transparent 82px);
+  color: var(--skin-deep-space);
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  border-radius: 0 0 0 20px;
+  min-width: 80px;
+  flex-shrink: 0;
+  animation: lcars-data-scroll 25s linear infinite;
+}
+
+@keyframes lcars-data-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-30%); }
+}
+
+/* Right status indicators — colored pill dots */
+.moltamp-panel-bottom::after {
+  content: '';
+  display: block;
+  margin-left: auto;
+  margin-right: 16px;
+  width: 200px;
+  height: 28px;
+  flex-shrink: 0;
+  background:
+    /* Status pill 1 — peach */
+    linear-gradient(90deg, var(--skin-lcars-peach) 0px, var(--skin-lcars-peach) 36px, transparent 36px) no-repeat 0 0 / 200px 8px,
+    /* Status pill 2 — gold */
+    linear-gradient(90deg, var(--skin-lcars-gold) 0px, var(--skin-lcars-gold) 52px, transparent 52px) no-repeat 44px 0 / 200px 8px,
+    /* Status pill 3 — salmon blink */
+    linear-gradient(90deg, var(--skin-lcars-salmon) 0px, var(--skin-lcars-salmon) 24px, transparent 24px) no-repeat 104px 0 / 200px 8px,
+    /* Row 2 */
+    /* Status pill 4 — lavender */
+    linear-gradient(90deg, var(--skin-lcars-lavender) 0px, var(--skin-lcars-lavender) 48px, transparent 48px) no-repeat 0 12px / 200px 8px,
+    /* Status pill 5 — blue */
+    linear-gradient(90deg, var(--skin-lcars-blue) 0px, var(--skin-lcars-blue) 28px, transparent 28px) no-repeat 56px 12px / 200px 8px,
+    /* Status pill 6 — peach */
+    linear-gradient(90deg, var(--skin-lcars-peach) 0px, var(--skin-lcars-peach) 60px, transparent 60px) no-repeat 92px 12px / 200px 8px;
+  border-radius: 4px;
+  animation: lcars-status-blink 3s ease-in-out infinite;
+}
+
+@keyframes lcars-status-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.8; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TITLE BAR — LCARS Header Strip
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-titlebar {
+  background:
+    linear-gradient(90deg,
+      var(--skin-lcars-peach) 0px, var(--skin-lcars-peach) 120px,
+      var(--skin-deep-space) 120px, var(--skin-deep-space) 124px,
+      var(--skin-lcars-gold) 124px, var(--skin-lcars-gold) 260px,
+      var(--skin-deep-space) 260px, var(--skin-deep-space) 264px,
+      var(--skin-lcars-lavender) 264px, var(--skin-lcars-lavender) 380px,
+      var(--skin-deep-space) 380px, var(--skin-deep-space) 384px,
+      var(--skin-lcars-blue) 384px, var(--skin-lcars-blue) 100%
+    );
+  border-bottom: 3px solid var(--skin-deep-space);
+  border-radius: 20px 20px 0 0;
+  -webkit-app-region: drag;
+}
+
+.moltamp-titlebar * {
+  color: var(--skin-deep-space) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATUS BAR — Lower LCARS band
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-statusbar {
+  background:
+    linear-gradient(90deg,
+      var(--skin-lcars-blue) 0px, var(--skin-lcars-blue) 80px,
+      var(--skin-deep-space) 80px, var(--skin-deep-space) 84px,
+      var(--skin-lcars-lavender) 84px, var(--skin-lcars-lavender) 200px,
+      var(--skin-deep-space) 200px, var(--skin-deep-space) 204px,
+      var(--skin-lcars-gold) 204px, var(--skin-lcars-gold) 100%
+    );
+  border-top: 3px solid var(--skin-deep-space);
+  border-radius: 0 0 20px 20px;
+}
+
+.moltamp-statusbar * {
+  color: var(--skin-deep-space) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  font-size: 10px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TERMINAL — Main Viewer
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-terminal {
+  border-left: 4px solid var(--skin-border-subtle);
+  border-right: 4px solid var(--skin-border-subtle);
+  background: var(--skin-deep-space);
+}
+
+.moltamp-terminal.glow-active {
+  box-shadow: inset 0 0 20px var(--skin-terminal-glow);
+}
+
+.moltamp-terminal.crt-active {
+  border-radius: 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SKIN BROWSER — LCARS-styled overlay
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-skin-overlay {
+  background: var(--skin-overlay-bg);
+}
+
+.moltamp-skin-panel {
+  border-color: var(--skin-lcars-lavender);
+  border-width: 2px;
+  border-radius: var(--radius);
+  box-shadow:
+    0 0 30px var(--skin-panel-glow),
+    inset 0 0 60px var(--skin-panel-inset);
+  background: var(--skin-panel-bg);
+}
+
+.moltamp-skin-card {
+  border-radius: 12px;
+  border-color: var(--skin-border-subtle);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.moltamp-skin-card:hover {
+  border-color: var(--skin-lcars-gold);
+  box-shadow: 0 0 12px var(--skin-card-hover-glow);
+}
+
+.moltamp-skin-card.active {
+  border-color: var(--skin-lcars-peach);
+  box-shadow:
+    0 0 8px var(--skin-card-active-glow),
+    0 0 20px var(--skin-card-active-glow-dim);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR — LCARS colored
+   ═══════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--skin-deep-space);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--skin-lcars-lavender);
+  border-radius: 20px;
+  border: 2px solid var(--skin-deep-space);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--skin-lcars-peach);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ANIMATIONS — Ambient LCARS activity
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Subtle ambient glow on the entire shell */
+@keyframes lcars-ambient {
+  0%, 100% {
+    box-shadow: inset 0 0 80px var(--skin-ambient-lavender);
+  }
+  33% {
+    box-shadow: inset 0 0 80px var(--skin-ambient-peach);
+  }
+  66% {
+    box-shadow: inset 0 0 80px var(--skin-ambient-blue);
+  }
+}
+
+.moltamp-shell {
+  animation: lcars-ambient 12s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SELECTION & FOCUS — LCARS warm accents
+   ═══════════════════════════════════════════════════════════════ */
+
+::selection {
+  background: var(--skin-selection-bg);
+  color: var(--skin-selection-text);
+}

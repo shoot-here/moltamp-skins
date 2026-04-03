@@ -1,0 +1,11 @@
+{
+  "id": "obsidian",
+  "name": "Obsidian",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Deep black terminal with amber accents. Inspired by volcanic glass.",
+  "engine": "1.0",
+  "effects": {
+    "scanlines": true
+  }
+}

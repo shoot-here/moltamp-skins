@@ -1,0 +1,11 @@
+{
+  "id": "lcars",
+  "name": "LCARS",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Federation starship console. Warm peach, gold, and lavender. Rounded pill shapes. Make it so.",
+  "engine": "1.0",
+  "effects": {
+    "glow": true
+  }
+}

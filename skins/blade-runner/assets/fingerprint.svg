@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200">
+  <defs>
+    <filter id="fp-glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="160" height="200" fill="#0a0800"/>
+
+  <!-- Fingerprint ridges — concentric arches -->
+  <g fill="none" stroke="#cc8833" stroke-width="1" opacity="0.7" transform="translate(80,110)" filter="url(#fp-glow)">
+    <ellipse rx="10" ry="12"/>
+    <ellipse rx="16" ry="20"/>
+    <ellipse rx="22" ry="28"/>
+    <ellipse rx="28" ry="36"/>
+    <ellipse rx="34" ry="44"/>
+    <ellipse rx="40" ry="52"/>
+    <ellipse rx="46" ry="60"/>
+    <ellipse rx="52" ry="68"/>
+    <!-- Whorl offset arches -->
+    <ellipse cx="-3" cy="-5" rx="13" ry="16" stroke-dasharray="8 3"/>
+    <ellipse cx="3" cy="-3" rx="19" ry="24" stroke-dasharray="12 4"/>
+    <ellipse cx="-2" cy="2" rx="25" ry="32" stroke-dasharray="10 5"/>
+    <ellipse cx="4" cy="-1" rx="31" ry="40" stroke-dasharray="14 3"/>
+    <ellipse cx="-1" cy="3" rx="37" ry="48" stroke-dasharray="8 6"/>
+  </g>
+
+  <!-- Scanning line animation placeholder — skins animate via CSS -->
+  <rect class="fp-scan-line" x="10" y="50" width="140" height="1" fill="#ffaa44" opacity="0.8"/>
+
+  <!-- Corner marks -->
+  <g stroke="#664400" stroke-width="1" fill="none">
+    <path d="M 15,30 L 15,45 M 15,30 L 30,30"/>
+    <path d="M 145,30 L 145,45 M 145,30 L 130,30"/>
+    <path d="M 15,185 L 15,170 M 15,185 L 30,185"/>
+    <path d="M 145,185 L 145,170 M 145,185 L 130,185"/>
+  </g>
+
+  <!-- Label -->
+  <text x="15" y="22" font-family="monospace" font-size="8" fill="#664400">BIOMETRIC ID</text>
+  <text x="85" y="22" font-family="monospace" font-size="7" fill="#cc8833">MATCH: 97.3%</text>
+  <text x="15" y="196" font-family="monospace" font-size="6" fill="#442200">NEXUS-6 // REPLICANT DETECTION SYSTEM</text>
+</svg>

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#221800" stroke-width="0.5"/>
+    </pattern>
+    <filter id="cg-glow">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="300" height="300" fill="#060400"/>
+  <rect width="300" height="300" fill="url(#grid)"/>
+
+  <!-- Circuit traces -->
+  <g stroke="#cc8833" stroke-width="1" fill="none" opacity="0.5" filter="url(#cg-glow)">
+    <!-- Horizontal bus lines -->
+    <line x1="0" y1="60" x2="300" y2="60"/>
+    <line x1="0" y1="140" x2="300" y2="140"/>
+    <line x1="0" y1="220" x2="300" y2="220"/>
+
+    <!-- Vertical bus lines -->
+    <line x1="80" y1="0" x2="80" y2="300"/>
+    <line x1="160" y1="0" x2="160" y2="300"/>
+    <line x1="240" y1="0" x2="240" y2="300"/>
+
+    <!-- Traces with right angles -->
+    <polyline points="40,20 40,60 80,60"/>
+    <polyline points="120,20 120,40 160,40 160,60"/>
+    <polyline points="200,20 200,60"/>
+    <polyline points="260,20 260,50 280,50 280,60"/>
+    <polyline points="20,80 50,80 50,140"/>
+    <polyline points="100,80 100,100 130,100 130,140"/>
+    <polyline points="180,80 180,110 210,110 210,140"/>
+    <polyline points="260,80 260,140"/>
+    <polyline points="40,160 40,180 70,180 70,220"/>
+    <polyline points="120,160 120,190 160,190 160,220"/>
+    <polyline points="200,160 200,220"/>
+    <polyline points="270,160 270,200 250,200 250,220"/>
+    <polyline points="30,240 30,280"/>
+    <polyline points="110,240 110,260 140,260 140,280"/>
+    <polyline points="190,240 190,280"/>
+    <polyline points="250,240 250,270 280,270"/>
+  </g>
+
+  <!-- IC chip blocks -->
+  <g fill="#110a00" stroke="#aa7722" stroke-width="1">
+    <rect x="65" y="125" width="30" height="30" rx="2"/>
+    <rect x="145" y="45" width="30" height="30" rx="2"/>
+    <rect x="225" y="205" width="30" height="30" rx="2"/>
+    <rect x="55" y="205" width="40" height="30" rx="2"/>
+  </g>
+
+  <!-- IC pin leads -->
+  <g stroke="#886622" stroke-width="0.8">
+    <line x1="70" y1="125" x2="70" y2="118"/>
+    <line x1="80" y1="125" x2="80" y2="118"/>
+    <line x1="90" y1="125" x2="90" y2="118"/>
+    <line x1="70" y1="155" x2="70" y2="162"/>
+    <line x1="80" y1="155" x2="80" y2="162"/>
+    <line x1="90" y1="155" x2="90" y2="162"/>
+  </g>
+
+  <!-- Node dots at intersections -->
+  <g fill="#ffaa44">
+    <circle cx="80" cy="60" r="3"/>
+    <circle cx="160" cy="60" r="3"/>
+    <circle cx="240" cy="60" r="3"/>
+    <circle cx="80" cy="140" r="3"/>
+    <circle cx="160" cy="140" r="3"/>
+    <circle cx="240" cy="140" r="3"/>
+    <circle cx="80" cy="220" r="3"/>
+    <circle cx="160" cy="220" r="3"/>
+    <circle cx="240" cy="220" r="3"/>
+  </g>
+
+  <!-- Data labels -->
+  <text x="8" y="12" font-family="monospace" font-size="6" fill="#553300">NEXUS-6 NEURAL MAP // SECTOR 4A</text>
+  <text x="8" y="295" font-family="monospace" font-size="5" fill="#332200">TYRELL CORP. PROPRIETARY // LEVEL 5 CLEARANCE</text>
+</svg>

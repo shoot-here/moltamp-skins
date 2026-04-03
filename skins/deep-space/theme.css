@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════════════════════════════
+   DEEP SPACE — Reactive Sci-Fi Cockpit
+
+   Panels react to Claude's activity:
+     data-activity="idle"  → calm, slow animations
+     data-activity="low"   → moderate activity
+     data-activity="high"  → full power, fast animations
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --t-foreground:    #a8d8ea;
+  --t-background:    #040810;
+  --t-cursor:        #00e5ff;
+  --t-cursor-accent: #040810;
+  --t-selection:     rgba(0, 229, 255, 0.15);
+
+  --t-black:    #0a1018;
+  --t-red:      #ff4455;
+  --t-green:    #00e676;
+  --t-yellow:   #ffd740;
+  --t-blue:     #40c4ff;
+  --t-magenta:  #e040fb;
+  --t-cyan:     #00e5ff;
+  --t-white:    #a8d8ea;
+
+  --t-bright-black:    #1a2838;
+  --t-bright-red:      #ff6677;
+  --t-bright-green:    #33ff99;
+  --t-bright-yellow:   #ffe566;
+  --t-bright-blue:     #66d4ff;
+  --t-bright-magenta:  #ea66ff;
+  --t-bright-cyan:     #33eeff;
+  --t-bright-white:    #d4eef8;
+
+  --c-chrome-bg:       #040810;
+  --c-chrome-text:     #4488aa;
+  --c-chrome-border:   #0c2030;
+  --c-chrome-accent:   #00e5ff;
+  --c-chrome-dim:      #1a3848;
+  --c-chrome-hover:    #081420;
+
+  --effect-scanlines:  1;
+  --effect-glow:       1;
+  --effect-crt:        0;
+  --scanline-opacity:  0.025;
+  --glow-intensity:    12px;
+  --c-glow:            rgba(0, 229, 255, 0.06);
+
+  --font-terminal: 'SF Mono', 'JetBrains Mono', monospace;
+  --font-chrome:   'SF Pro Display', 'Inter', -apple-system, sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VIBES PANEL — Radar + Signal Bars (top banner)
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-vibes {
+  min-height: 60px;
+  position: relative;
+  border-bottom: 1px solid #0c2030;
+  overflow: hidden;
+}
+
+/* ── Cyan tint overlay — blends GIF into deep-space palette ── */
+
+.moltamp-vibes::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 8, 16, 0.15);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ── Scanline overlay ──────────────────────────────────────── */
+
+.moltamp-vibes::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(4, 8, 16, 0.08) 2px,
+    rgba(4, 8, 16, 0.08) 4px
+  );
+  pointer-events: none;
+  opacity: var(--effect-scanlines);
+}
+
+/* ── REACTIVE: Vibes intensity follows activity ────────────── */
+
+[data-activity="high"] .moltamp-vibes {
+  filter: brightness(1.1) saturate(1.15);
+  animation: vibes-glow-ds 2s ease-in-out infinite;
+}
+
+@keyframes vibes-glow-ds {
+  0%, 100% { box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.05); }
+  50% { box-shadow: inset 0 0 40px rgba(0, 229, 255, 0.15); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LEFT PANEL — IntelPanel container
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-left {
+  width: 200px;
+  background: #030608;
+  border-right: 1px solid #0c2030;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RIGHT PANEL — Real telemetry (React component)
+   Skin only styles the container — content is live data.
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-right {
+  width: 210px;
+  background: #030608;
+  border-left: 1px solid #0c2030;
+}
+
+/* REACTIVE: panel glow when active */
+[data-activity="high"] .moltamp-panel-right {
+  box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.04);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM PANEL — Real telemetry bar (React component)
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-panel-bottom {
+  background: #030608;
+  border-top: 1px solid #0c2030;
+}
+
+[data-activity="high"] .moltamp-panel-bottom {
+  box-shadow: 0 -1px 8px rgba(0, 229, 255, 0.04);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TERMINAL GLOW — reactive
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-terminal.glow-active {
+  box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.03);
+  transition: box-shadow 0.5s ease;
+}
+
+[data-activity="low"] .moltamp-terminal.glow-active {
+  box-shadow: inset 0 0 16px rgba(0, 229, 255, 0.06);
+}
+
+[data-activity="high"] .moltamp-terminal.glow-active {
+  box-shadow: inset 0 0 24px rgba(0, 229, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CHROME
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-titlebar {
+  background: linear-gradient(180deg, #060c14 0%, #040810 100%);
+}
+
+.moltamp-statusbar {
+  background: #030608;
+}
+
+.moltamp-shell {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(0, 229, 255, 0.015) 0%, transparent 70%),
+    #040810;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SKIN BROWSER
+   ═══════════════════════════════════════════════════════════════ */
+
+.moltamp-skin-overlay {
+  background: rgba(2, 4, 8, 0.88);
+}
+
+.moltamp-skin-panel {
+  border-color: #0c2030;
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.05);
+}
+
+.moltamp-skin-card.active {
+  border-color: #00e5ff;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.12);
+}

@@ -1,0 +1,20 @@
+{
+  "id": "phosphor",
+  "name": "Phosphor",
+  "version": "1.0.0",
+  "author": "Moltamp",
+  "description": "Green phosphor CRT. Scanlines, glow, and grid decay. Feels like hacking in 1983.",
+  "engine": "1.0",
+  "effects": {
+    "scanlines": true,
+    "glow": true,
+    "crt": true,
+    "grid": true,
+    "text-glow": true
+  },
+  "vibes": {
+    "slots": [
+      { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
+    ]
+  }
+}
