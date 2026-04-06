@@ -42,9 +42,28 @@
   --effect-scanlines:  1;
   --effect-glow:       1;
   --effect-crt:        0;
+  --effect-vibes-glow: 1;
   --scanline-opacity:  0.025;
   --glow-intensity:    12px;
   --c-glow:            rgba(0, 229, 255, 0.06);
+
+  /* Skin palette — single source for all deep-space colors */
+  --skin-bg-deep:      #040810;
+  --skin-bg-panel:     #030608;
+  --skin-border:       #0c2030;
+  --skin-bg-titlebar:  #060c14;
+  --skin-cyan:         #00e5ff;
+  --skin-cyan-003:     rgba(0, 229, 255, 0.03);
+  --skin-cyan-004:     rgba(0, 229, 255, 0.04);
+  --skin-cyan-005:     rgba(0, 229, 255, 0.05);
+  --skin-cyan-006:     rgba(0, 229, 255, 0.06);
+  --skin-cyan-010:     rgba(0, 229, 255, 0.1);
+  --skin-cyan-012:     rgba(0, 229, 255, 0.12);
+  --skin-cyan-015:     rgba(0, 229, 255, 0.015);
+  --skin-cyan-015a:    rgba(0, 229, 255, 0.15);
+  --skin-overlay-dark: rgba(4, 8, 16, 0.15);
+  --skin-overlay-line: rgba(4, 8, 16, 0.08);
+  --skin-overlay-bg:   rgba(2, 4, 8, 0.88);
 
   --font-terminal: 'SF Mono', 'JetBrains Mono', monospace;
   --font-chrome:   'SF Pro Display', 'Inter', -apple-system, sans-serif;
@@ -57,7 +76,7 @@
 .moltamp-vibes {
   min-height: 60px;
   position: relative;
-  border-bottom: 1px solid #0c2030;
+  border-bottom: 1px solid var(--skin-border);
   overflow: hidden;
 }
 
@@ -67,7 +86,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(4, 8, 16, 0.15);
+  background: var(--skin-overlay-dark);
   mix-blend-mode: multiply;
   pointer-events: none;
 }
@@ -82,8 +101,8 @@
     0deg,
     transparent,
     transparent 2px,
-    rgba(4, 8, 16, 0.08) 2px,
-    rgba(4, 8, 16, 0.08) 4px
+    var(--skin-overlay-line) 2px,
+    var(--skin-overlay-line) 4px
   );
   pointer-events: none;
   opacity: var(--effect-scanlines);
@@ -91,14 +110,15 @@
 
 /* ── REACTIVE: Vibes intensity follows activity ────────────── */
 
+/* Activity states — gated behind --effect-vibes-glow */
 [data-activity="high"] .moltamp-vibes {
-  filter: brightness(1.1) saturate(1.15);
+  filter: brightness(calc(1 + 0.1 * var(--effect-vibes-glow))) saturate(calc(1 + 0.15 * var(--effect-vibes-glow)));
   animation: vibes-glow-ds 2s ease-in-out infinite;
 }
 
 @keyframes vibes-glow-ds {
-  0%, 100% { box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.05); }
-  50% { box-shadow: inset 0 0 40px rgba(0, 229, 255, 0.15); }
+  0%, 100% { box-shadow: inset 0 0 calc(20px * var(--effect-vibes-glow)) var(--skin-cyan-005); }
+  50% { box-shadow: inset 0 0 calc(40px * var(--effect-vibes-glow)) var(--skin-cyan-015a); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -107,8 +127,8 @@
 
 .moltamp-panel-left {
   width: 200px;
-  background: #030608;
-  border-right: 1px solid #0c2030;
+  background: var(--skin-bg-panel);
+  border-right: 1px solid var(--skin-border);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -118,13 +138,13 @@
 
 .moltamp-panel-right {
   width: 210px;
-  background: #030608;
-  border-left: 1px solid #0c2030;
+  background: var(--skin-bg-panel);
+  border-left: 1px solid var(--skin-border);
 }
 
 /* REACTIVE: panel glow when active */
 [data-activity="high"] .moltamp-panel-right {
-  box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.04);
+  box-shadow: inset 0 0 12px var(--skin-cyan-004);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -132,12 +152,12 @@
    ═══════════════════════════════════════════════════════════════ */
 
 .moltamp-panel-bottom {
-  background: #030608;
-  border-top: 1px solid #0c2030;
+  background: var(--skin-bg-panel);
+  border-top: 1px solid var(--skin-border);
 }
 
 [data-activity="high"] .moltamp-panel-bottom {
-  box-shadow: 0 -1px 8px rgba(0, 229, 255, 0.04);
+  box-shadow: 0 -1px 8px var(--skin-cyan-004);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -145,16 +165,16 @@
    ═══════════════════════════════════════════════════════════════ */
 
 .moltamp-terminal.glow-active {
-  box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.03);
+  box-shadow: inset 0 0 12px var(--skin-cyan-003);
   transition: box-shadow 0.5s ease;
 }
 
 [data-activity="low"] .moltamp-terminal.glow-active {
-  box-shadow: inset 0 0 16px rgba(0, 229, 255, 0.06);
+  box-shadow: inset 0 0 16px var(--skin-cyan-006);
 }
 
 [data-activity="high"] .moltamp-terminal.glow-active {
-  box-shadow: inset 0 0 24px rgba(0, 229, 255, 0.1);
+  box-shadow: inset 0 0 24px var(--skin-cyan-010);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -162,17 +182,17 @@
    ═══════════════════════════════════════════════════════════════ */
 
 .moltamp-titlebar {
-  background: linear-gradient(180deg, #060c14 0%, #040810 100%);
+  background: linear-gradient(180deg, var(--skin-bg-titlebar) 0%, var(--skin-bg-deep) 100%);
 }
 
 .moltamp-statusbar {
-  background: #030608;
+  background: var(--skin-bg-panel);
 }
 
 .moltamp-shell {
   background:
-    radial-gradient(ellipse at 50% 50%, rgba(0, 229, 255, 0.015) 0%, transparent 70%),
-    #040810;
+    radial-gradient(ellipse at 50% 50%, var(--skin-cyan-015) 0%, transparent 70%),
+    var(--skin-bg-deep);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -180,15 +200,15 @@
    ═══════════════════════════════════════════════════════════════ */
 
 .moltamp-skin-overlay {
-  background: rgba(2, 4, 8, 0.88);
+  background: var(--skin-overlay-bg);
 }
 
 .moltamp-skin-panel {
-  border-color: #0c2030;
-  box-shadow: 0 0 40px rgba(0, 229, 255, 0.05);
+  border-color: var(--skin-border);
+  box-shadow: 0 0 40px var(--skin-cyan-005);
 }
 
 .moltamp-skin-card.active {
-  border-color: #00e5ff;
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.12);
+  border-color: var(--skin-cyan);
+  box-shadow: 0 0 8px var(--skin-cyan-012);
 }

@@ -44,11 +44,14 @@
   --c-glow:            rgba(255, 170, 68, 0.06);
 
   /* Effects */
-  --effect-scanlines:  1;
-  --effect-glow:       1;
-  --effect-crt:        1;
-  --scanline-opacity:  0.04;
-  --glow-intensity:    10px;
+  --effect-scanlines:    1;
+  --effect-glow:         1;
+  --effect-crt:          1;
+  --effect-vibes-glow:   1;
+  --effect-vibes-pulse:  1;
+  --effect-waveform:     1;
+  --scanline-opacity:    0.04;
+  --glow-intensity:      10px;
 
   /* Fonts */
   --font-terminal: 'SF Mono', 'JetBrains Mono', monospace;
@@ -168,13 +171,13 @@
 /* ── High: vivid, glowing ──────────────────────────────────── */
 
 [data-activity="high"] .moltamp-vibes {
-  filter: brightness(1.1) saturate(1.1);
+  filter: brightness(calc(1 + 0.1 * var(--effect-vibes-glow))) saturate(calc(1 + 0.1 * var(--effect-vibes-glow)));
   animation: vibes-glow 2s ease-in-out infinite;
 }
 
 @keyframes vibes-glow {
-  0%, 100% { box-shadow: inset 0 0 20px var(--skin-glow-faint); }
-  50% { box-shadow: inset 0 0 40px var(--skin-glow-soft); }
+  0%, 100% { box-shadow: inset 0 0 calc(20px * var(--effect-vibes-glow)) var(--skin-glow-faint); }
+  50% { box-shadow: inset 0 0 calc(40px * var(--effect-vibes-glow)) var(--skin-glow-soft); }
 }
 
 /* ── Thinking: subtle pulse ────────────────────────────────── */
@@ -184,8 +187,8 @@
 }
 
 @keyframes vibes-think {
-  0%, 100% { filter: brightness(0.7); }
-  50% { filter: brightness(1); }
+  0%, 100% { filter: brightness(calc(1 - 0.3 * var(--effect-vibes-pulse))); }
+  50%      { filter: brightness(1); }
 }
 
 /* ── Error: red flash ──────────────────────────────────────── */
@@ -208,8 +211,8 @@
 }
 
 @keyframes vibes-perm {
-  0%, 100% { filter: brightness(0.8); }
-  50% { filter: brightness(1.2); box-shadow: inset 0 0 30px var(--skin-glow-medium); }
+  0%, 100% { filter: brightness(calc(1 - 0.2 * var(--effect-vibes-pulse))); }
+  50% { filter: brightness(calc(1 + 0.2 * var(--effect-vibes-pulse))); box-shadow: inset 0 0 calc(30px * var(--effect-vibes-pulse)) var(--skin-glow-medium); }
 }
 
 
@@ -249,7 +252,7 @@
 
 [data-activity="high"] .moltamp-panel-bottom {
   animation: waveform-scroll 6s linear infinite;
-  filter: brightness(1.3);
+  filter: brightness(calc(1 + 0.3 * var(--effect-waveform)));
 }
 
 [data-activity="low"] .moltamp-panel-bottom {
@@ -258,7 +261,7 @@
 
 @keyframes waveform-scroll {
   0% { background-position: 0 center; }
-  100% { background-position: -400px center; }
+  100% { background-position: calc(-400px * var(--effect-waveform)) center; }
 }
 
 

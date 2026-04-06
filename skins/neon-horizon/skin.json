@@ -8,11 +8,51 @@
   "effects": {
     "scanlines": true,
     "glow": true,
-    "grid": true
+    "grid": true,
+    "vibes-glow":  { "label": "Vibes Glow",  "description": "Filter glow and box-shadow on high activity" },
+    "vibes-pulse": { "label": "Vibes Pulse", "description": "Brightness pulse while thinking" }
   },
   "vibes": {
     "slots": [
       { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
     ]
+  },
+  "defaultLayout": {
+    "tabAssignments": {
+      "intel": ["events", "files", "agents", "git"],
+      "signal": ["custom-1", "custom-2", "custom-3", "custom-4"]
+    },
+    "tabVisibility": {
+      "events": true, "files": true, "agents": true, "git": true,
+      "custom-1": true, "custom-2": true, "custom-3": true, "custom-4": true
+    },
+    "customTabs": {
+      "custom-1": { "label": "ARCADE", "widgets": ["clock", "session-timer", "event-calendar"] },
+      "custom-2": { "label": "AVATAR", "widgets": ["live2d", "notes"] },
+      "custom-3": { "label": "SCOREBOARD", "widgets": ["usage-model", "usage-context", "usage-tokens", "usage-session"] },
+      "custom-4": { "label": "DASHBOARD", "widgets": ["system", "weather", "usage-rates", "usage-lifetime"] }
+    },
+    "dimensions": {
+      "leftWidth": 260,
+      "rightWidth": 190,
+      "vibesHeight": 180,
+      "bottomHeight": 26,
+      "panelScale": 1,
+      "terminalScale": 1
+    },
+    "panelVisibility": {
+      "showVibes": true,
+      "showLeft": true,
+      "showRight": true,
+      "showBottom": true
+    },
+    "vibesDeck": {
+      "slots": [
+        { "gifSrc": "assets/vibes.gif", "gifFit": "cover" },
+        { "widgetId": "visualizer" },
+        { "widgetId": "equalizer" }
+      ],
+      "widths": [40, 35, 25]
+    }
   }
 }

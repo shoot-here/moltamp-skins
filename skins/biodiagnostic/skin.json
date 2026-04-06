@@ -7,11 +7,56 @@
   "engine": "1.0",
   "effects": {
     "scanlines": true,
-    "glow": true
+    "glow": true,
+    "heartbeat":    { "label": "Heartbeat",      "description": "Double-pulse glow on the shell border" },
+    "scan-sweep":   { "label": "Scan Sweep",     "description": "Scanning line on the right panel" },
+    "vital-ticker": { "label": "Vital Ticker",   "description": "Scrolling vital signs in the bottom bar" },
+    "status-blink": { "label": "Status Blink",   "description": "Blinking nominal indicator dot" },
+    "vibes-glow":   { "label": "Vibes Glow",     "description": "Panel glow on high activity" },
+    "vibes-pulse":  { "label": "Vibes Pulse",    "description": "Brightness pulse while thinking" },
+    "panel-art":    { "label": "Panel Art",      "description": "GIF artwork behind left and right panels" }
   },
   "vibes": {
     "slots": [
       { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
     ]
+  },
+  "defaultLayout": {
+    "tabAssignments": {
+      "intel": ["events", "files", "agents", "git"],
+      "signal": ["custom-1", "custom-2", "custom-3", "custom-4"]
+    },
+    "tabVisibility": {
+      "events": true, "files": false, "agents": true, "git": false,
+      "custom-1": true, "custom-2": true, "custom-3": true, "custom-4": true
+    },
+    "customTabs": {
+      "custom-1": { "label": "VITALS", "widgets": ["system", "usage-context", "usage-tokens", "usage-session"] },
+      "custom-2": { "label": "WAVEFORM", "widgets": ["visualizer", "equalizer"] },
+      "custom-3": { "label": "PATIENT", "widgets": ["live2d", "session-timer", "clock"] },
+      "custom-4": { "label": "CHART", "widgets": ["calendar", "usage-model", "usage-rates", "usage-lifetime"] }
+    },
+    "dimensions": {
+      "leftWidth": 220,
+      "rightWidth": 210,
+      "vibesHeight": 160,
+      "bottomHeight": 26,
+      "panelScale": 1,
+      "terminalScale": 1
+    },
+    "panelVisibility": {
+      "showVibes": true,
+      "showLeft": false,
+      "showRight": true,
+      "showBottom": true
+    },
+    "vibesDeck": {
+      "slots": [
+        { "gifSrc": "assets/vibes.gif", "gifFit": "cover" },
+        { "widgetId": "session-timer" },
+        { "widgetId": "system" }
+      ],
+      "widths": [50, 25, 25]
+    }
   }
 }

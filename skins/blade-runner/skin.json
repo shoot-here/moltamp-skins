@@ -8,11 +8,51 @@
   "effects": {
     "scanlines": true,
     "glow": true,
-    "crt": true
+    "crt": true,
+    "vibes-glow":  { "label": "Vibes Glow",  "description": "Amber glow and brightening on vibes panel during high activity" },
+    "vibes-pulse": { "label": "Vibes Pulse", "description": "Brightness pulse on vibes panel during thinking and permission states" },
+    "waveform":    { "label": "Waveform",    "description": "Scrolling waveform animation and reactive speed on the bottom panel" }
   },
   "vibes": {
     "slots": [
       { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
     ]
+  },
+  "defaultLayout": {
+    "tabAssignments": {
+      "intel": ["events", "agents", "git", "files"],
+      "signal": ["custom-1", "custom-2", "custom-3", "custom-4"]
+    },
+    "tabVisibility": {
+      "events": true, "files": false, "agents": true, "git": true,
+      "custom-1": true, "custom-2": true, "custom-3": true, "custom-4": true
+    },
+    "customTabs": {
+      "custom-1": { "label": "DOSSIER", "widgets": ["notes", "weather", "system", "clock"] },
+      "custom-2": { "label": "SURVEILLANCE", "widgets": ["visualizer", "music"] },
+      "custom-3": { "label": "VOIGHT-KAMPFF", "widgets": ["usage-model", "usage-context", "usage-tokens", "usage-session", "usage-rates"] },
+      "custom-4": { "label": "REPLICANT", "widgets": ["live2d", "session-timer"] }
+    },
+    "dimensions": {
+      "leftWidth": 260,
+      "rightWidth": 220,
+      "vibesHeight": 140,
+      "bottomHeight": 26,
+      "panelScale": 1,
+      "terminalScale": 1
+    },
+    "panelVisibility": {
+      "showVibes": true,
+      "showLeft": true,
+      "showRight": true,
+      "showBottom": true
+    },
+    "vibesDeck": {
+      "slots": [
+        { "gifSrc": "assets/vibes.gif", "gifFit": "cover" },
+        { "widgetId": "clock" }
+      ],
+      "widths": [75, 25]
+    }
   }
 }

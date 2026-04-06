@@ -44,6 +44,8 @@
   --effect-scanlines:  1;
   --effect-glow:       1;
   --effect-crt:        0;
+  --effect-vibes-anim: 1;
+  --effect-ticker:     1;
   --scanline-opacity:  0.07;
   --glow-intensity:    18px;
   --c-glow:            rgba(255, 51, 0, 0.10);
@@ -170,6 +172,8 @@
     420px -8px 0 -3px var(--skin-red-050);
 
   animation: moon-drift 60s linear infinite;
+  opacity: var(--effect-vibes-anim);
+  pointer-events: none;
 }
 
 @keyframes moon-drift {
@@ -193,12 +197,13 @@
   right: 0;
   pointer-events: none;
   animation: phase-labels-drift 60s linear infinite;
+  opacity: var(--effect-vibes-anim);
 }
 
 @keyframes phase-labels-drift {
-  0%   { transform: translateX(0); opacity: 0.6; }
-  50%  { opacity: 0.8; }
-  100% { transform: translateX(-60px); opacity: 0.6; }
+  0%   { transform: translateX(0); filter: opacity(0.6); }
+  50%  { filter: opacity(0.8); }
+  100% { transform: translateX(-60px); filter: opacity(0.6); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -303,6 +308,7 @@
     590px 40px 0 -22px var(--skin-primary),
     600px 38px 0 -22px var(--skin-primary);
   animation: wave-pulse 4s ease-in-out infinite alternate;
+  opacity: var(--effect-ticker);
 }
 
 @keyframes wave-pulse {
@@ -443,6 +449,8 @@
   font-size: 8px;
   letter-spacing: 0.15em;
   animation: label-pulse 3s ease-in-out infinite;
+  opacity: var(--effect-ticker);
+  pointer-events: none;
   z-index: 1;
 }
 

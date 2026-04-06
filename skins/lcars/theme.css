@@ -46,6 +46,9 @@
   --effect-scanlines:  0;
   --effect-glow:       1;
   --effect-crt:        0;
+  --effect-vibes-pulse: 1;
+  --effect-ticker:     1;
+  --effect-ambient:    1;
   --scanline-opacity:  0;
   --glow-intensity:    8px;
   --c-glow:            rgba(255, 153, 102, 0.04);
@@ -146,6 +149,7 @@
   height: 222px;
   border-radius: 0 40px 0 0;
   position: relative;
+  pointer-events: none;
 }
 
 /* Lower LCARS modules — stacked indicator blocks */
@@ -179,12 +183,14 @@
     /* Block — gold dim */
     linear-gradient(180deg, var(--skin-lcars-gold-dim) 0px, var(--skin-lcars-gold-dim) 30px, transparent 30px) no-repeat 0 200px / 140px 30px;
   border-radius: 0 0 0 0;
+  pointer-events: none;
+  opacity: var(--effect-vibes-pulse);
   animation: lcars-pulse-vibes 6s ease-in-out infinite;
 }
 
 @keyframes lcars-pulse-vibes {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.92; }
+  0%, 100% { filter: opacity(1); }
+  50%      { filter: opacity(0.92); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -222,6 +228,8 @@
   border-radius: 0 0 0 20px;
   min-width: 80px;
   flex-shrink: 0;
+  pointer-events: none;
+  opacity: var(--effect-ticker);
   animation: lcars-data-scroll 25s linear infinite;
 }
 
@@ -254,12 +262,14 @@
     /* Status pill 6 — peach */
     linear-gradient(90deg, var(--skin-lcars-peach) 0px, var(--skin-lcars-peach) 60px, transparent 60px) no-repeat 92px 12px / 200px 8px;
   border-radius: 4px;
+  pointer-events: none;
+  opacity: var(--effect-ticker);
   animation: lcars-status-blink 3s ease-in-out infinite;
 }
 
 @keyframes lcars-status-blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.8; }
+  0%, 100% { filter: opacity(1); }
+  50%      { filter: opacity(0.8); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -398,13 +408,13 @@
 /* Subtle ambient glow on the entire shell */
 @keyframes lcars-ambient {
   0%, 100% {
-    box-shadow: inset 0 0 80px var(--skin-ambient-lavender);
+    box-shadow: inset 0 0 calc(80px * var(--effect-ambient)) var(--skin-ambient-lavender);
   }
   33% {
-    box-shadow: inset 0 0 80px var(--skin-ambient-peach);
+    box-shadow: inset 0 0 calc(80px * var(--effect-ambient)) var(--skin-ambient-peach);
   }
   66% {
-    box-shadow: inset 0 0 80px var(--skin-ambient-blue);
+    box-shadow: inset 0 0 calc(80px * var(--effect-ambient)) var(--skin-ambient-blue);
   }
 }
 

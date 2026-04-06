@@ -40,12 +40,31 @@
   --c-chrome-hover:    #0c1828;
 
   /* Effects */
-  --effect-scanlines: 1;
-  --effect-glow:      1;
-  --effect-crt:       0;
-  --scanline-opacity: 0.03;
-  --glow-intensity:   16px;
-  --c-glow:           rgba(0, 212, 255, 0.08);
+  --effect-scanlines:   1;
+  --effect-glow:        1;
+  --effect-crt:         0;
+  --effect-vibes-glow:  1;
+  --effect-edge-pulse:  1;
+  --scanline-opacity:   0.03;
+  --glow-intensity:     16px;
+  --c-glow:             rgba(0, 212, 255, 0.08);
+
+  /* Skin-local palette */
+  --skin-void:              #060a10;
+  --skin-vibes-border:      #0a1a2a;
+  --skin-vibes-tint:        rgba(2, 8, 16, 0.1);
+  --skin-scanline-tint:     rgba(2, 8, 16, 0.06);
+  --skin-cyan-faint:        rgba(0, 212, 255, 0.03);
+  --skin-cyan-subtle:       rgba(0, 212, 255, 0.04);
+  --skin-cyan-dim:          rgba(0, 212, 255, 0.05);
+  --skin-cyan-border:       rgba(0, 212, 255, 0.06);
+  --skin-cyan-soft:         rgba(0, 212, 255, 0.08);
+  --skin-cyan-grid:         rgba(0, 212, 255, 0.1);
+  --skin-cyan-medium:       rgba(0, 212, 255, 0.12);
+  --skin-cyan-accent:       rgba(0, 212, 255, 0.15);
+  --skin-cyan-glow:         rgba(0, 212, 255, 0.2);
+  --skin-cyan-bright:       rgba(0, 212, 255, 0.3);
+  --skin-overlay-bg:        rgba(4, 8, 14, 0.85);
 
   --font-terminal: 'JetBrains Mono', 'Fira Code', monospace;
 }
@@ -54,7 +73,7 @@
 
 .moltamp-vibes {
   min-height: 60px;
-  border-bottom: 1px solid #0a1a2a;
+  border-bottom: 1px solid var(--skin-vibes-border);
   position: relative;
   overflow: hidden;
 }
@@ -63,7 +82,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(2, 8, 16, 0.1);
+  background: var(--skin-vibes-tint);
   mix-blend-mode: multiply;
   pointer-events: none;
 }
@@ -74,7 +93,7 @@
   inset: 0;
   background: repeating-linear-gradient(
     0deg, transparent, transparent 2px,
-    rgba(2, 8, 16, 0.06) 2px, rgba(2, 8, 16, 0.06) 4px
+    var(--skin-scanline-tint) 2px, var(--skin-scanline-tint) 4px
   );
   pointer-events: none;
   opacity: var(--effect-scanlines);
@@ -85,43 +104,43 @@
 }
 
 @keyframes ice-vibes-glow {
-  0%, 100% { box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.05); }
-  50% { box-shadow: inset 0 0 40px rgba(0, 212, 255, 0.15); }
+  0%, 100% { box-shadow: inset 0 0 calc(20px * var(--effect-vibes-glow)) var(--skin-cyan-dim); }
+  50% { box-shadow: inset 0 0 calc(40px * var(--effect-vibes-glow)) var(--skin-cyan-accent); }
 }
 
 /* ── Frosted Edge Glow ───────────────────────────────────────── */
 
 .moltamp-terminal.glow-active {
   box-shadow:
-    inset 0 0 16px rgba(0, 212, 255, 0.05),
-    inset 0 1px 0 rgba(0, 212, 255, 0.06);
+    inset 0 0 16px var(--skin-cyan-dim),
+    inset 0 1px 0 var(--skin-cyan-border);
   animation: ice-breathe 6s ease-in-out infinite;
 }
 
 @keyframes ice-breathe {
   0%, 100% {
     box-shadow:
-      inset 0 0 16px rgba(0, 212, 255, 0.04),
-      inset 0 1px 0 rgba(0, 212, 255, 0.04);
+      inset 0 0 16px var(--skin-cyan-subtle),
+      inset 0 1px 0 var(--skin-cyan-subtle);
   }
   50% {
     box-shadow:
-      inset 0 0 30px rgba(0, 212, 255, 0.08),
-      inset 0 1px 0 rgba(0, 212, 255, 0.08);
+      inset 0 0 30px var(--skin-cyan-soft),
+      inset 0 1px 0 var(--skin-cyan-soft);
   }
 }
 
 /* ── Title Bar — frosted line ────────────────────────────────── */
 
 .moltamp-titlebar {
-  border-bottom: 1px solid rgba(0, 212, 255, 0.08);
-  background: linear-gradient(180deg, rgba(0, 212, 255, 0.03) 0%, transparent 100%);
+  border-bottom: 1px solid var(--skin-cyan-soft);
+  background: linear-gradient(180deg, var(--skin-cyan-faint) 0%, transparent 100%);
 }
 
 /* ── Status Bar — cold accent ────────────────────────────────── */
 
 .moltamp-statusbar {
-  border-top: 1px solid rgba(0, 212, 255, 0.06);
+  border-top: 1px solid var(--skin-cyan-border);
 }
 
 /* ── Corner Accent Lights ────────────────────────────────────── */
@@ -136,19 +155,20 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(0, 212, 255, 0.15) 20%,
-    rgba(0, 212, 255, 0.3) 50%,
-    rgba(0, 212, 255, 0.15) 80%,
+    var(--skin-cyan-accent) 20%,
+    var(--skin-cyan-bright) 50%,
+    var(--skin-cyan-accent) 80%,
     transparent 100%
   );
   z-index: 12;
   pointer-events: none;
+  opacity: var(--effect-edge-pulse);
   animation: edge-pulse 4s ease-in-out infinite;
 }
 
 @keyframes edge-pulse {
-  0%, 100% { opacity: 0.4; }
-  50%      { opacity: 1; }
+  0%, 100% { opacity: calc(0.4 * var(--effect-edge-pulse)); }
+  50%      { opacity: var(--effect-edge-pulse); }
 }
 
 /* ── Bottom Edge Line ────────────────────────────────────────── */
@@ -167,9 +187,9 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(0, 212, 255, 0.1) 30%,
-    rgba(0, 212, 255, 0.2) 50%,
-    rgba(0, 212, 255, 0.1) 70%,
+    var(--skin-cyan-grid) 30%,
+    var(--skin-cyan-glow) 50%,
+    var(--skin-cyan-grid) 70%,
     transparent 100%
   );
   pointer-events: none;
@@ -179,15 +199,15 @@
 /* ── Skin Browser — icy ──────────────────────────────────────── */
 
 .moltamp-skin-overlay {
-  background: rgba(4, 8, 14, 0.85);
+  background: var(--skin-overlay-bg);
 }
 
 .moltamp-skin-panel {
-  border-color: rgba(0, 212, 255, 0.12);
-  box-shadow: 0 0 30px rgba(0, 212, 255, 0.06);
+  border-color: var(--skin-cyan-medium);
+  box-shadow: 0 0 30px var(--skin-cyan-border);
 }
 
 .moltamp-skin-card.active {
-  border-color: #00d4ff;
-  box-shadow: 0 0 6px rgba(0, 212, 255, 0.12);
+  border-color: var(--c-chrome-accent);
+  box-shadow: 0 0 6px var(--skin-cyan-medium);
 }

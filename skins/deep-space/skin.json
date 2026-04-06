@@ -7,11 +7,50 @@
   "engine": "1.0",
   "effects": {
     "scanlines": true,
-    "glow": true
+    "glow": true,
+    "vibes-glow": { "label": "Vibes Glow", "description": "Glow and filter pulse on high activity" }
   },
   "vibes": {
     "slots": [
       { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
     ]
+  },
+  "defaultLayout": {
+    "tabAssignments": {
+      "intel": ["events", "files", "agents", "git"],
+      "signal": ["custom-1", "custom-2", "custom-3", "custom-4"]
+    },
+    "tabVisibility": {
+      "events": true, "files": true, "agents": true, "git": true,
+      "custom-1": true, "custom-2": true, "custom-3": true, "custom-4": true
+    },
+    "customTabs": {
+      "custom-1": { "label": "SENSORS", "widgets": ["system", "weather", "world-clock"] },
+      "custom-2": { "label": "COMMS", "widgets": ["music", "visualizer"] },
+      "custom-3": { "label": "CREW", "widgets": ["live2d", "calendar"] },
+      "custom-4": { "label": "TELEMETRY", "widgets": ["usage-model", "usage-context", "usage-tokens", "usage-session", "usage-rates", "usage-lifetime"] }
+    },
+    "dimensions": {
+      "leftWidth": 250,
+      "rightWidth": 200,
+      "vibesHeight": 220,
+      "bottomHeight": 26,
+      "panelScale": 1,
+      "terminalScale": 1
+    },
+    "panelVisibility": {
+      "showVibes": true,
+      "showLeft": true,
+      "showRight": true,
+      "showBottom": true
+    },
+    "vibesDeck": {
+      "slots": [
+        { "gifSrc": "assets/vibes.gif", "gifFit": "cover" },
+        { "widgetId": "world-clock" },
+        { "widgetId": "weather" }
+      ],
+      "widths": [50, 25, 25]
+    }
   }
 }

@@ -7,6 +7,50 @@
   "engine": "1.0",
   "effects": {
     "scanlines": true,
-    "glow": true
+    "glow": true,
+    "vibes-anim": { "label": "Moon Phases", "description": "Drifting moon phase display and labels in the vibes banner" },
+    "ticker":     { "label": "Waveform",    "description": "Sine waveform and label in the bottom panel" }
+  },
+  "vibes": {
+    "slots": [
+      { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
+    ]
+  },
+  "defaultLayout": {
+    "tabAssignments": {
+      "intel": ["events", "files", "agents", "git"],
+      "signal": ["custom-1", "custom-2", "custom-3"]
+    },
+    "tabVisibility": {
+      "events": true, "files": true, "agents": true, "git": true,
+      "custom-1": true, "custom-2": true, "custom-3": true, "custom-4": false
+    },
+    "customTabs": {
+      "custom-1": { "label": "OBSERVATORY", "widgets": ["clock", "world-clock", "weather", "calendar"] },
+      "custom-2": { "label": "FREQUENCIES", "widgets": ["music", "equalizer", "visualizer"] },
+      "custom-3": { "label": "TELEMETRY", "widgets": ["usage-model", "usage-context", "usage-tokens", "usage-session", "usage-rates", "session-timer"] },
+      "custom-4": { "label": "VOID", "widgets": ["live2d"] }
+    },
+    "dimensions": {
+      "leftWidth": 240,
+      "rightWidth": 200,
+      "vibesHeight": 150,
+      "bottomHeight": 26,
+      "panelScale": 1,
+      "terminalScale": 1
+    },
+    "panelVisibility": {
+      "showVibes": true,
+      "showLeft": false,
+      "showRight": true,
+      "showBottom": true
+    },
+    "vibesDeck": {
+      "slots": [
+        { "gifSrc": "assets/vibes.gif", "gifFit": "cover" },
+        { "widgetId": "event-calendar" }
+      ],
+      "widths": [60, 40]
+    }
   }
 }
