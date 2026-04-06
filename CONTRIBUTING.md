@@ -1,6 +1,18 @@
+<div align="center">
+
+<a href="https://moltamp.com">
+  <img src=".github/assets/logo.png" alt="MOLTamp" width="56"/>
+</a>
+
+<br/><br/>
+
 # Contributing to MOLTamp Skins
 
-Thanks for making a skin. Here's how to get it into the repo.
+**Thanks for making a skin.** Here's how to get it into the repo.
+
+</div>
+
+<br/>
 
 ## Quick Version
 
@@ -19,9 +31,9 @@ skins/your-skin/
   preview.png     <- Screenshot (required for PR)
 ```
 
-## Rules
+## Guidelines
 
-These are enforced by MOLTamp's validator and preflight system. Break them and your skin won't load correctly.
+MOLTamp's validator checks these automatically. If something's off, it'll tell you what to fix.
 
 1. **All colors in `:root` as CSS variables.** Use `var()` in selectors. Never hardcode hex/rgb.
 2. **Override the contract vars.** `--t-*` for terminal, `--c-chrome-*` for chrome.
@@ -61,4 +73,12 @@ You can use ChatGPT, Claude, Codex, etc. to generate skins. See the "For AI-gene
 
 ## Code of Conduct
 
-Be cool. Make cool skins. Help others make cool skins.
+Be respectful. Share your creativity. Help others succeed with their skins.
+
+<br/>
+
+<div align="center">
+
+<sub><a href="https://moltamp.com">moltamp.com</a> &nbsp;&middot;&nbsp; <a href="SKINNING.md">Skinning Guide</a> &nbsp;&middot;&nbsp; <a href="README.md">Back to README</a></sub>
+
+</div>

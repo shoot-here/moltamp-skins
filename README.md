@@ -4,6 +4,18 @@
 
 <br/>
 
+<a href="https://moltamp.com">
+  <img src=".github/assets/logo.png" alt="MOLTamp" width="80" style="margin: 16px 0;"/>
+</a>
+
+<br/>
+
+<a href="https://moltamp.com">
+  <img src=".github/assets/hero-link.png" alt="MOLTamp — Skinnable Shell for AI Terminals" width="720" style="border-radius: 12px; margin: 8px 0;"/>
+</a>
+
+<br/>
+
 <img src=".github/assets/hero.png" alt="MOLTamp in action" width="720" style="border-radius: 12px; margin: 16px 0;"/>
 
 <img src="screenshots/obsidian-editor.png" alt="Obsidian skin — code editor + widgets" width="720" style="border-radius: 12px; margin: 8px 0;"/>
@@ -12,12 +24,12 @@
 
 <br/>
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Skins](https://img.shields.io/badge/skins-10-a855f7.svg?style=flat-square)](#browse-skins)
-[![Spec](https://img.shields.io/badge/spec-v2.0-4d9fff.svg?style=flat-square)](SKINNING.md)
-[![Website](https://img.shields.io/badge/moltamp.com-skinning-ec4899.svg?style=flat-square)](https://moltamp.com/skinning/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-4d9fff.svg?style=flat-square&labelColor=08080a)](LICENSE)
+[![Skins](https://img.shields.io/badge/skins-11-ff6b4d.svg?style=flat-square&labelColor=08080a)](#browse-skins)
+[![Spec](https://img.shields.io/badge/spec-v3.0-4d9fff.svg?style=flat-square&labelColor=08080a)](SKINNING.md)
+[![Website](https://img.shields.io/badge/moltamp.com-skinning-ff6b4d.svg?style=flat-square&labelColor=08080a)](https://moltamp.com/skinning/)
 
-**[Download MOLTamp](https://moltamp.com)** &nbsp;&middot;&nbsp; **[Skinning Guide](SKINNING.md)**
+**[Download MOLTamp](https://moltamp.com)** &nbsp;&middot;&nbsp; **[Skinning Guide](SKINNING.md)** &nbsp;&middot;&nbsp; **[Contributing](CONTRIBUTING.md)**
 
 </div>
 
@@ -101,7 +113,13 @@ MOLTamp wraps Claude Code's terminal in a skinnable cockpit UI — vibes panel, 
 <sub>Synthwave magenta/cyan</sub>
 
 </td>
-<td align="center" colspan="2">
+<td align="center">
+
+**Deep Claw**<br/>
+<sub>Industrial amber brutalism</sub>
+
+</td>
+<td align="center">
 
 *Your skin here* &rarr; [submit a PR](#contributing)
 
@@ -183,19 +201,21 @@ skins/my-skin/
 
 <br/>
 
-## The Rules
+## Guidelines
 
-| # | Rule | Enforced |
-|---|------|----------|
+| # | Guideline | How it's checked |
+|---|-----------|-----------------|
 | 1 | All colors in `:root` as CSS variables | Validator |
 | 2 | Override contract vars (`--t-*`, `--c-chrome-*`) | Convention |
 | 3 | Custom vars use `--skin-*` prefix | Convention |
-| 4 | No `background` on `.moltamp-vibes` | Preflight |
-| 5 | `pointer-events: none` on `::before`/`::after` | Preflight |
+| 4 | No `background` on `.moltamp-vibes` | Preflight auto-fix |
+| 5 | `pointer-events: none` on `::before`/`::after` | Preflight auto-fix |
 | 6 | No external URLs, `@import`, or JS | Validator |
 | 7 | Assets in `assets/`, max 5MB/file | Validator |
+| 8 | All effects gated with `--effect-*` variables | Validator warns |
+| 9 | Ship a `defaultLayout` with themed tabs | Convention |
 
-**Preflight** = MOLTamp auto-fixes it at load time. Your skin literally cannot break clicks, hovers, or drag handles.
+**Preflight** auto-fixes interaction safety at load time. Your skin can't accidentally break clicks, hovers, or drag handles — we handle that.
 
 <br/>
 
@@ -292,6 +312,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide and checklist.
 <br/>
 
 <div align="center">
+
+<a href="https://moltamp.com">
+  <img src=".github/assets/logo.png" alt="MOLTamp" width="32"/>
+</a>
+
+<br/>
 
 <sub>Made for the community by <a href="https://moltamp.com">MOLTamp</a></sub>
 
