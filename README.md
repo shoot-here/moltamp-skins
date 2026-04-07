@@ -1,146 +1,111 @@
 <div align="center">
 
-<a href="https://moltamp.com">
-  <img src=".github/assets/hero-link.png" alt="MOLTamp — Skinnable Shell for AI Terminals" width="720" style="border-radius: 12px; margin: 16px 0;"/>
-</a>
+<img src="https://raw.githubusercontent.com/shoot-here/moltamp-skins/main/.github/assets/banner.svg" alt="Moltamp Skins — community themes for AI terminals" width="100%"/>
 
-<br/>
+<br/><br/>
 
-<img src=".github/assets/hero.png" alt="MOLTamp in action" width="720" style="border-radius: 12px; margin: 16px 0;"/>
+# Moltamp Skins
 
-<img src="screenshots/obsidian-editor.png" alt="Obsidian skin — code editor + widgets" width="720" style="border-radius: 12px; margin: 8px 0;"/>
+**Community CSS themes for the Moltamp cockpit shell — vibe coding for Claude Code, Codex CLI, Gemini CLI, and Aider.**
 
-<img src="screenshots/phosphor-media.png" alt="Phosphor skin — visualizer + now playing" width="720" style="border-radius: 12px; margin: 8px 0;"/>
+[![License: MIT](https://img.shields.io/github/license/shoot-here/moltamp-skins?style=flat-square&color=4d9fff&labelColor=08080a)](LICENSE)
+[![Skins](https://img.shields.io/badge/skins-11-ff6b4d?style=flat-square&labelColor=08080a)](#featured-skins)
+[![Spec](https://img.shields.io/badge/spec-SKINNING.md-4d9fff?style=flat-square&labelColor=08080a)](SKINNING.md)
+[![Gallery](https://img.shields.io/badge/gallery-moltamp.com-ff6b4d?style=flat-square&labelColor=08080a)](https://moltamp.com/community)
 
-<br/>
-
-[![License: MIT](https://img.shields.io/badge/license-MIT-4d9fff.svg?style=flat-square&labelColor=08080a)](LICENSE)
-[![Skins](https://img.shields.io/badge/skins-11-ff6b4d.svg?style=flat-square&labelColor=08080a)](#browse-skins)
-[![Spec](https://img.shields.io/badge/spec-v3.0-4d9fff.svg?style=flat-square&labelColor=08080a)](SKINNING.md)
-[![Website](https://img.shields.io/badge/moltamp.com-skinning-ff6b4d.svg?style=flat-square&labelColor=08080a)](https://moltamp.com/skinning/)
-
-**[Download MOLTamp](https://moltamp.com)** &nbsp;&middot;&nbsp; **[Skinning Guide](SKINNING.md)** &nbsp;&middot;&nbsp; **[Contributing](CONTRIBUTING.md)**
+**[Download Moltamp](https://moltamp.com)** &nbsp;&middot;&nbsp; **[Browse the Gallery](https://moltamp.com/community)** &nbsp;&middot;&nbsp; **[Skinning Guide](SKINNING.md)** &nbsp;&middot;&nbsp; **[Contributing](CONTRIBUTING.md)**
 
 </div>
 
 <br/>
 
-## What is MOLTamp?
+## What's this repo?
 
-MOLTamp wraps Claude Code's terminal in a skinnable cockpit UI — vibes panel, side panels, telemetry ticker, reactive animations. Everything responds to Claude's state through CSS. Think **Winamp for AI terminals**.
+This is the open-source theme library for **[Moltamp](https://moltamp.com)** — a skinnable cockpit UI for AI coding terminals like **Claude Code**, **Codex CLI**, **Gemini CLI**, and **Aider**. Think Winamp, but for the terminal you actually code in.
 
-> Pure CSS. Zero JavaScript. Full creative freedom.
+A Moltamp skin is **pure CSS**. No JavaScript, no build step, no dependencies. Drop a folder into Moltamp and the entire shell — terminal colors, side panels, vibes banner, telemetry ticker, animations — restyles itself. Skins react to live AI state through CSS data attributes, so your theme can pulse when Claude is thinking, dim when idle, or glow when a tool fires.
+
+If you've ever wanted your AI terminal to feel like an LCARS console, a Blade Runner noir scene, a phosphor CRT, or a synthwave dashboard — this is the place.
+
+> **Keywords:** Claude Code themes, Claude Code skins, AI terminal themes, terminal customization, vibe coding, Codex CLI themes, Gemini CLI themes, Aider themes, Moltamp.
 
 <br/>
 
-## Browse Skins
+## Featured Skins
 
 <table>
 <tr>
-<td align="center" width="33%">
-
-**Obsidian**<br/>
-<sub>Clean dark default</sub>
-
-</td>
-<td align="center" width="33%">
-
-**Phosphor**<br/>
-<sub>Green CRT terminal</sub>
-
-</td>
-<td align="center" width="33%">
-
-**Blade Runner**<br/>
-<sub>Amber noir with rain</sub>
-
-</td>
+<td align="center" width="33%"><b>Obsidian</b><br/><sub>Clean dark default</sub></td>
+<td align="center" width="33%"><b>Phosphor</b><br/><sub>Green CRT terminal</sub></td>
+<td align="center" width="33%"><b>Blade Runner</b><br/><sub>Amber noir with rain</sub></td>
 </tr>
 <tr>
-<td align="center">
-
-**Deep Space**<br/>
-<sub>Cyan space station</sub>
-
-</td>
-<td align="center">
-
-**Kosmos**<br/>
-<sub>Soviet space program</sub>
-
-</td>
-<td align="center">
-
-**Biodiagnostic**<br/>
-<sub>Teal medical/biotech</sub>
-
-</td>
+<td align="center"><b>Deep Space</b><br/><sub>Cyan space station</sub></td>
+<td align="center"><b>Kosmos</b><br/><sub>Soviet space program</sub></td>
+<td align="center"><b>Biodiagnostic</b><br/><sub>Teal medical lab</sub></td>
 </tr>
 <tr>
-<td align="center">
-
-**Ice Nine**<br/>
-<sub>Frozen blue crystalline</sub>
-
-</td>
-<td align="center">
-
-**LCARS**<br/>
-<sub>Star Trek computer</sub>
-
-</td>
-<td align="center">
-
-**Lunar**<br/>
-<sub>Moon phase observatory</sub>
-
-</td>
+<td align="center"><b>Ice Nine</b><br/><sub>Frozen blue crystalline</sub></td>
+<td align="center"><b>LCARS</b><br/><sub>Star Trek computer</sub></td>
+<td align="center"><b>Lunar</b><br/><sub>Moon phase observatory</sub></td>
 </tr>
 <tr>
-<td align="center">
-
-**Neon Horizon**<br/>
-<sub>Synthwave magenta/cyan</sub>
-
-</td>
-<td align="center">
-
-**Deep Claw**<br/>
-<sub>Industrial amber brutalism</sub>
-
-</td>
-<td align="center">
-
-*Your skin here* &rarr; [submit a PR](#contributing)
-
-</td>
+<td align="center"><b>Neon Horizon</b><br/><sub>Synthwave magenta/cyan</sub></td>
+<td align="center"><b>Deep Claw</b><br/><sub>Industrial amber brutalism</sub></td>
+<td align="center"><i>Your skin here</i><br/><sub><a href="#contribute-a-skin">submit a PR</a></sub></td>
 </tr>
 </table>
 
+Browse every community skin (with live previews) at **[moltamp.com/community](https://moltamp.com/community)**.
+
 <br/>
 
-## Install
+## What's in this repo
 
-```bash
-# Clone and copy
-git clone https://github.com/shoot-here/moltamp-skins.git
-cp -r moltamp-skins/skins/blade-runner ~/Moltamp/skins/
+```
+moltamp-skins/
+├── skins/              <- One folder per skin (drop-in installable)
+│   ├── obsidian/
+│   ├── phosphor/
+│   ├── blade-runner/
+│   └── ... (11 total)
+├── screenshots/        <- Preview images for the README
+├── SKINNING.md         <- Full authoring spec — variables, classes, reactive data
+├── CONTRIBUTING.md     <- PR checklist + review criteria
+└── README.md
 ```
 
-Or: **MOLTamp > Settings > Skins > Import** &rarr; select folder or `.zip`
+<br/>
+
+## Install a skin
+
+**Inside Moltamp** (recommended):
+
+> Settings &rarr; Skins &rarr; Import &rarr; pick the skin folder or `.zip`.
+
+**From the command line:**
+
+```bash
+git clone https://github.com/shoot-here/moltamp-skins.git
+cp -r moltamp-skins/skins/blade-runner ~/.moltamp/skins/
+```
+
+Restart Moltamp and pick your new skin from the skin browser.
 
 <br/>
 
-## Create a Skin
+## Make a skin in 60 seconds
+
+A skin is two files in a folder:
 
 ```
 skins/my-skin/
   skin.json         <- manifest
-  theme.css         <- all styles
-  assets/           <- GIFs, images (optional)
+  theme.css         <- all the styling
+  assets/           <- optional: GIFs, images, fonts
 ```
 
-### `skin.json`
+**`skin.json`**
 
 ```json
 {
@@ -148,167 +113,74 @@ skins/my-skin/
   "name": "My Skin",
   "version": "1.0.0",
   "author": "Your Name",
-  "description": "Short description.",
+  "description": "What it looks like in one line.",
   "engine": "1.0"
 }
 ```
 
-### `theme.css`
+**`theme.css`** (the bare minimum)
 
 ```css
 :root {
-  /* Contract — required */
+  /* Terminal colors */
   --t-foreground: #e0e0e8;
   --t-background: #0a0a0f;
+
+  /* Chrome colors */
   --c-chrome-bg: #0a0a0f;
   --c-chrome-accent: #d4a036;
 
-  /* Your palette — use --skin-* prefix */
-  --skin-panel-bg: #070b07;
+  /* Custom palette — use the --skin-* prefix */
   --skin-overlay: rgba(7, 11, 7, 0.15);
 
-  /* Custom effects — auto-appear as toggles in Settings */
+  /* Toggleable effects appear in Settings automatically */
   --effect-scanlines: 1;
-  --effect-radar: 0.5;
 }
 
-/* Reactive — responds to Claude's state */
-[data-activity="high"] .moltamp-vibes {
-  filter: brightness(1.2) saturate(1.1);
-}
-
-/* Overlays — always include pointer-events: none */
-.moltamp-vibes::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--skin-overlay);
-  pointer-events: none;
-}
-```
-
-> **Full spec:** [SKINNING.md](SKINNING.md) &mdash; every variable, every class, reactive data, custom effects, AI prompt block.
-
-<br/>
-
-## Guidelines
-
-| # | Guideline | How it's checked |
-|---|-----------|-----------------|
-| 1 | All colors in `:root` as CSS variables | Validator |
-| 2 | Override contract vars (`--t-*`, `--c-chrome-*`) | Convention |
-| 3 | Custom vars use `--skin-*` prefix | Convention |
-| 4 | No `background` on `.moltamp-vibes` | Preflight auto-fix |
-| 5 | `pointer-events: none` on `::before`/`::after` | Preflight auto-fix |
-| 6 | No external URLs, `@import`, or JS | Validator |
-| 7 | Assets in `assets/`, max 5MB/file | Validator |
-| 8 | All effects gated with `--effect-*` variables | Validator warns |
-| 9 | Ship a `defaultLayout` with themed tabs | Convention |
-
-**Preflight** auto-fixes interaction safety at load time. Your skin can't accidentally break clicks, hovers, or drag handles — we handle that.
-
-<br/>
-
-## Custom Effects
-
-Any `--effect-*` variable in `:root` auto-appears in **Settings > Effects** as a toggle with intensity slider.
-
-```css
-:root {
-  --effect-radar: 1;        /* "Radar" at 100% */
-  --effect-heat-haze: 0;    /* "Heat Haze", off by default */
-}
-
-/* Control visibility with the variable */
-.moltamp-vibes::before {
-  opacity: var(--effect-radar);
-  animation: sweep 4s linear infinite;
-  pointer-events: none;
-}
-```
-
-Nice labels via `skin.json`:
-
-```json
-{ "effects": { "radar": { "label": "Sonar Radar", "description": "Rotating sweep" } } }
-```
-
-<br/>
-
-## Reactive Data
-
-Skins react to Claude's live state via attributes on `.moltamp-shell`:
-
-```css
-/* Claude is thinking */
+/* React to live AI state */
 [data-shell-state="thinking"] .moltamp-terminal {
-  box-shadow: inset 0 0 30px rgba(100, 200, 255, 0.1);
-}
-
-/* Heavy streaming */
-[data-activity="high"] .moltamp-vibes {
-  filter: brightness(1.3);
-}
-
-/* Context gauge as pie chart */
-.moltamp-context-gauge {
-  background: conic-gradient(
-    var(--c-chrome-accent) calc(var(--data-context-pct) * 1%),
-    var(--c-chrome-border) 0
-  );
+  filter: brightness(1.1);
 }
 ```
 
-<details>
-<summary><strong>All reactive attributes &amp; properties</strong></summary>
-
-| Attribute | Values |
-|-----------|--------|
-| `data-activity` | `idle` `low` `high` |
-| `data-shell-state` | `idle` `thinking` `streaming` `tool-use` `permission` `error` `complete` |
-| `data-model` | Model name |
-
-| CSS Property | Description |
-|-------------|-------------|
-| `--data-context-pct` | Context used (0-100) |
-| `--data-cost-cents` | Session cost |
-| `--data-tokens-in` | Input tokens (K) |
-| `--data-tokens-out` | Output tokens (K) |
-| `--data-rate-5h` | 5h rate limit (0-100) |
-| `--data-agents` | Active subagents |
-| `--data-git-changed` | Changed files |
-
-</details>
+That's a working skin. The full variable list, every targetable class, reactive data attributes, and a ready-to-paste AI prompt block all live in **[SKINNING.md](SKINNING.md)**.
 
 <br/>
 
-## Using AI
+## Generate one with AI
 
-Point ChatGPT, Claude, or Codex at [SKINNING.md](SKINNING.md) — it has a ready-to-paste prompt block in the **"For AI-generated skins"** section.
-
-MOLTamp's preflight system auto-fixes common AI mistakes, so generated skins work safely even when the AI misses a rule.
+Point Claude, ChatGPT, Codex, or any LLM at **[SKINNING.md](SKINNING.md)** — it includes a complete prompt block in the *"For AI-generated skins"* section. Moltamp's preflight system auto-fixes common rule violations at load time, so AI-generated skins work safely even when the model misses a detail.
 
 <br/>
 
-## Contributing
+## Contribute a skin
 
-1. Fork this repo
+1. **Fork** this repo
 2. Create `skins/your-skin-id/` with `skin.json` + `theme.css`
-3. Add a `preview.png` screenshot
-4. [Open a PR](../../pulls)
+3. Add a `preview.png` screenshot (1200x750 looks great)
+4. Run through the checklist in **[CONTRIBUTING.md](CONTRIBUTING.md)**
+5. **[Open a PR](../../pulls)** — we review weekly
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide and checklist.
+Merged skins ship in the next Moltamp release and appear in the in-app skin browser plus **[moltamp.com/community](https://moltamp.com/community)**.
+
+<br/>
+
+## License
+
+[MIT](LICENSE) — use, fork, remix, ship. Attribution appreciated but not required.
 
 <br/>
 
 <div align="center">
 
 <a href="https://moltamp.com">
-  <img src=".github/assets/logo.png" alt="MOLTamp" width="32"/>
+  <img src=".github/assets/logo.png" alt="Moltamp" width="32"/>
 </a>
 
 <br/>
 
-<sub>Made for the community by <a href="https://moltamp.com">MOLTamp</a></sub>
+<sub>Made for the community by <a href="https://moltamp.com">Moltamp</a></sub>
 
 </div>
+
+<!-- repo topics: moltamp, claude-code, claude-code-themes, claude-code-skins, ai-terminal, terminal-themes, terminal-customization, electron, vibe-coding, css-themes, codex-cli, gemini-cli, aider, developer-tools, theming -->
