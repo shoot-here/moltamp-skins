@@ -25,7 +25,7 @@ moltamp-skins/
 4. **Every `::before`/`::after` needs `pointer-events: none`.** Always.
 5. **Every animation/glow/filter must be gated with `--effect-*` variables.** No ungated effects.
 6. **No external URLs, no `@import`, no `javascript:`, no `expression()`.** CSS only, zero network.
-7. **No `.nag-*` or `.license-*` selectors.** Hard block -- skin won't load.
+7. **No targeting Moltamp internal UI.** Hard block -- skin won't load. Stick to the documented `.moltamp-*` classes.
 8. **Custom variables use `--skin-*` prefix.** E.g., `--skin-panel-bg`, `--skin-overlay`.
 9. **Never use `*` (universal selector) with display, opacity, pointer-events, or position.**
 10. **Never set `overflow: hidden` on `.moltamp-shell`, `.moltamp-deck`, `.moltamp-titlebar`, or `.moltamp-statusbar`.**
@@ -57,7 +57,7 @@ moltamp-skins/
 - Setting `overflow: hidden` on containers (clips context menus)
 - Using `flex-direction: column` on `.moltamp-deck` (rotates entire layout)
 - Not including `engine: "1.0"` in skin.json
-- Referencing `.nag-*` or `.license-*` selectors (hard block, skin won't load)
+- Targeting Moltamp internal UI elements (hard block, skin won't load — stick to documented `.moltamp-*` classes)
 - Applying `transform` to `.moltamp-shell` (breaks `position: fixed` children)
 
 ## File Size Limits

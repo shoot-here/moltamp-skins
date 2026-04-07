@@ -201,18 +201,13 @@ Skins must not use `display: none` on any panel element (`.moltamp-vibes`, `.mol
 - No `data: text/*` URIs
 - CSS only. Zero JS.
 
-### 5. Don't hide the permission dialog
+### 5. Avoid global hide patterns
 
-These properties trigger validator warnings on elements that could obscure permission prompts:
-- `visibility: hidden`
-- `opacity: 0`
-- `pointer-events: none`
+Skin CSS that uses `visibility: hidden`, `opacity: 0`, or `pointer-events: none` on global selectors (`*`, `body > *`, `body *`) will trigger validator warnings. Be specific with your selectors — target the elements you actually want to style, not everything on the page.
 
-### 6. No targeting protected UI
+### 6. No targeting Moltamp internal UI
 
-Skins must not reference `.nag-*` or `.license-*` CSS selectors. These target the license popup, which renders in a Shadow DOM outside the skin's scope. Any skin containing these selectors will **fail validation and not load**.
-
-The license popup is fully isolated — Shadow DOM blocks all external CSS, including `!important`, `body > *`, universal selectors, `@layer`, `@font-face`, and inherited properties. This is not bypassable via CSS.
+Skins must not target Moltamp's internal license, billing, or permission UI. The validator hard-blocks any skin that does — you'll see a clear error on import. If you're not sure whether a class name belongs to Moltamp's internals or to the skinnable shell, stick to the documented `.moltamp-*` classes listed in this guide; everything else is off-limits.
 
 ### 7. No backgrounds on `.moltamp-vibes`
 
@@ -1215,7 +1210,7 @@ Skin CSS is validated at load time. The validator returns **errors** (fatal — 
 
 - `background` or `background-image` on `.moltamp-vibes`
 - `::before`/`::after` without `pointer-events: none`
-- `visibility: hidden` or `opacity: 0` on elements that could obscure permission prompts
+- `visibility: hidden`, `opacity: 0`, or `pointer-events: none` on global selectors (`*`, `body > *`, etc.)
 - **Ungated effects** — the validator scans for these patterns and warns when they aren't controlled by an `--effect-*` variable:
   - `animation` properties not on an element with `opacity: var(--effect-*)` or `calc(... * var(--effect-*))`
   - `box-shadow` with non-zero blur/spread not inside a `calc(... * var(--effect-*))` expression
@@ -1382,7 +1377,7 @@ CSS RULES:
 - NEVER set background or background-image on .moltamp-vibes
 - Every ::before and ::after MUST include pointer-events: none
 - No external URLs, no @import, no expression(), no javascript:
-- NEVER reference .nag-* or .license-* selectors (hard block, skin won't load)
+- NEVER target Moltamp internal UI elements (validator hard-blocks)
 
 EFFECTS — CRITICAL:
 - EVERY animation, box-shadow, glow, filter, and animated GIF background MUST be gated
@@ -1598,7 +1593,7 @@ Before sharing your skin:
 - [ ] No `background` or `background-image` on `.moltamp-vibes`
 - [ ] Every `::before`/`::after` has `pointer-events: none`
 - [ ] No external URLs or `@import`
-- [ ] No `.nag-*` or `.license-*` selectors
+- [ ] No selectors targeting Moltamp internal UI
 - [ ] `theme.css` under 100KB
 - [ ] Assets under 5MB each, 20MB total
 - [ ] Tested at different panel sizes (resize handles)
