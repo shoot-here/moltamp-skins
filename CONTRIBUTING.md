@@ -45,7 +45,7 @@ MOLTamp's validator checks these automatically. If something's off, it'll tell y
 
 ## Custom Effects
 
-Want a user-toggleable effect? Declare `--effect-youreffect: 1;` in `:root`. It auto-appears in Settings > Effects as a toggle with intensity slider.
+Want a user-toggleable effect? Declare `--effect-youreffect: 1;` in `:root`. It auto-appears in Settings > Effects as a toggle with intensity slider. The slider range is 0% to 200%, where 1 = 100% (your intended default).
 
 Add labels in `skin.json`:
 ```json
@@ -55,6 +55,32 @@ Add labels in `skin.json`:
   }
 }
 ```
+
+## Naming Conventions
+
+- **Skin IDs** are `lowercase-kebab-case` — e.g., `neon-horizon`, `deep-space`, `ice-nine`. Must match `^[a-zA-Z0-9_-]+$`.
+- **Display names** are Title Case — e.g., "Neon Horizon", "Deep Space", "Ice Nine". Set this in the `name` field of `skin.json`.
+- **Skin folder name** must match the `id` in `skin.json`.
+
+## Preview Screenshots Required
+
+Every PR submission must include a `preview.png` screenshot in your skin's folder. This is how people browse skins before trying them.
+
+- **Recommended size:** 800x500 pixels
+- **Show the skin in action:** panels open, some terminal content visible, effects active
+- **Capture the full window** — title bar, vibes, panels, statusbar
+- Take the screenshot in MOLTamp with a realistic session, not an empty terminal
+
+## AI-Generated Skins Welcome
+
+If you used ChatGPT, Claude, Codex, or another AI to generate your skin, that's great. AI-generated skins are welcome and treated the same as hand-crafted ones. The only requirements are:
+
+- The skin passes validation (the validator checks this automatically)
+- You've tested it visually in MOLTamp and it looks intentional
+- Effects are properly gated with `--effect-*` variables
+- It has a `preview.png` screenshot
+
+See the "For AI-generated skins" section in [SKINNING.md](SKINNING.md) for a ready-to-paste prompt block that gives the AI all the rules upfront. MOLTamp's preflight system also auto-fixes common AI mistakes, so generated skins work safely even when the AI misses a rule.
 
 ## Testing Your Skin
 
@@ -66,10 +92,20 @@ Before submitting:
 - [ ] Permission dialog is visible and clickable
 - [ ] Looks good at different window sizes
 - [ ] Toggle panels on/off in Settings > Layout
+- [ ] Effects work at 0%, 100%, and 200% intensity
 
-## Using AI
+## Review Criteria
 
-You can use ChatGPT, Claude, Codex, etc. to generate skins. See the "For AI-generated skins" section in [SKINNING.md](SKINNING.md) for a ready-to-paste prompt. MOLTamp's preflight system fixes common AI mistakes automatically.
+When maintainers review your PR, they're looking for:
+
+1. **Validation pass** — the skin loads without errors. Warnings are OK if they're acknowledged.
+2. **No security issues** — no external URLs, no path traversal, no attempts to target protected UI.
+3. **Visual quality** — the skin looks intentional and polished. It doesn't have to be complex, but it should look like a finished product, not a half-started experiment.
+4. **Effects properly gated** — every animation, glow, and filter is controlled by an `--effect-*` variable. Users must be able to disable any visual effect.
+5. **Contract variables overridden** — the skin actually changes the look. A submission that uses all default contract values isn't a skin, it's the template.
+6. **Preview screenshot included** — `preview.png` at 800x500 showing the skin in action.
+
+We'll work with you if something needs adjustment. The goal is to get your skin in, not to gatekeep.
 
 ## Code of Conduct
 

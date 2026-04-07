@@ -1,0 +1,49 @@
+{
+  "id": "deep-claw",
+  "name": "Deep Claw",
+  "version": "1.0.0",
+  "author": "OpenAI",
+  "description": "A neon ocean-terminal skin with electric amber highlights and a reactive sonar-style vibes panel.",
+  "engine": "1.0",
+  "effects": {
+    "chrome-tint": { "label": "Chrome Tint", "description": "Backdrop blur on titlebar, statusbar, and side panels" },
+    "vibes-sweep": { "label": "Vibes Sweep", "description": "Rotating gradient animation in the vibes banner" },
+    "reactive-vibes": { "label": "Reactive Vibes", "description": "Brightness and saturation shift on activity changes" },
+    "panel-glow": { "label": "Panel Glow", "description": "Glow on bottom context bar and right panel gauge" }
+  },
+  "vibes": {
+    "slots": [
+      { "widgetId": "gif", "gifSrc": "assets/vibes.gif", "gifFit": "cover" }
+    ]
+  },
+  "defaultLayout": {
+    "tabAssignments": {
+      "intel": ["events", "files", "agents", "git"],
+      "signal": ["custom-1", "custom-2"]
+    },
+    "tabVisibility": {
+      "events": true, "files": true, "agents": true, "git": true,
+      "custom-1": true, "custom-2": true, "custom-3": false, "custom-4": false
+    },
+    "customTabs": {
+      "custom-1": { "label": "SONAR", "widgets": ["system", "weather", "world-clock", "clock", "session-timer"] },
+      "custom-2": { "label": "METRICS", "widgets": ["usage-model", "usage-context", "usage-tokens", "usage-session", "usage-rates"] },
+      "custom-3": { "label": "OPTICS", "widgets": ["live2d"] },
+      "custom-4": { "label": "FEED", "widgets": ["music", "visualizer"] }
+    },
+    "dimensions": {
+      "leftWidth": 300,
+      "rightWidth": 180,
+      "vibesHeight": 120,
+      "bottomHeight": 26,
+      "panelScale": 1,
+      "terminalScale": 1
+    },
+    "panelVisibility": {
+      "showVibes": false,
+      "showLeft": true,
+      "showRight": true,
+      "showBottom": true
+    }
+  }
+}
