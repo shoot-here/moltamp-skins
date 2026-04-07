@@ -87,7 +87,7 @@ moltamp-skins/
 
 ```bash
 git clone https://github.com/shoot-here/moltamp-skins.git
-cp -r moltamp-skins/skins/blade-runner ~/.moltamp/skins/
+cp -r moltamp-skins/skins/blade-runner ~/Moltamp/skins/
 ```
 
 Restart Moltamp and pick your new skin from the skin browser.
