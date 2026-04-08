@@ -61,7 +61,7 @@ moltamp-skins/
 - Not including `engine: "1.0"` in skin.json
 - Targeting Moltamp internal UI elements (hard block, skin won't load — stick to documented `.moltamp-*` classes)
 - Referencing a reserved internal `--*` variable namespace (validator rejects on import with a clear error)
-- Trying to hide a forbidden name behind CSS escape sequences (`\6e ag-foo`, `\nag-foo`) — the validator normalizes escapes before matching
+- Trying to hide a forbidden name behind CSS escape sequences — the validator normalizes both hex (`\6e`) and identity (`\n`) escapes before matching, so escape tricks don't work
 - Mentioning a protected name in a code comment and assuming it will trip the validator — comments are stripped before matching, so honest doc comments are safe
 - Applying `transform` to `.moltamp-shell` (breaks `position: fixed` children)
 
