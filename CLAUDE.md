@@ -29,6 +29,8 @@ moltamp-skins/
 8. **Custom variables use `--skin-*` prefix.** E.g., `--skin-panel-bg`, `--skin-overlay`.
 9. **Never use `*` (universal selector) with display, opacity, pointer-events, or position.**
 10. **Never set `overflow: hidden` on `.moltamp-shell`, `.moltamp-deck`, `.moltamp-titlebar`, or `.moltamp-statusbar`.**
+11. **Don't reference reserved internal chrome variable namespaces.** Several `--*` namespaces are reserved for Moltamp's internal UI and are hard-blocked by the validator. Keep all custom variables under the documented `--skin-*`, `--t-*`, `--c-*`, or `--effect-*` prefixes. You'll see a clear error on import if you stray.
+12. **Don't try to hide forbidden tokens behind CSS escapes.** The validator normalizes escape sequences (both hex `\6e` and identity `\n` forms) before pattern matching, so escape tricks will still be caught. Write CSS normally.
 
 ## When Generating a New Skin
 
@@ -58,6 +60,9 @@ moltamp-skins/
 - Using `flex-direction: column` on `.moltamp-deck` (rotates entire layout)
 - Not including `engine: "1.0"` in skin.json
 - Targeting Moltamp internal UI elements (hard block, skin won't load — stick to documented `.moltamp-*` classes)
+- Referencing a reserved internal `--*` variable namespace (validator rejects on import with a clear error)
+- Trying to hide a forbidden name behind CSS escape sequences (`\6e ag-foo`, `\nag-foo`) — the validator normalizes escapes before matching
+- Mentioning a protected name in a code comment and assuming it will trip the validator — comments are stripped before matching, so honest doc comments are safe
 - Applying `transform` to `.moltamp-shell` (breaks `position: fixed` children)
 
 ## File Size Limits

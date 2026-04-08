@@ -37,11 +37,12 @@ MOLTamp's validator checks these automatically. If something's off, it'll tell y
 
 1. **All colors in `:root` as CSS variables.** Use `var()` in selectors. Never hardcode hex/rgb.
 2. **Override the contract vars.** `--t-*` for terminal, `--c-chrome-*` for chrome.
-3. **Custom vars use `--skin-*` prefix.**
+3. **Custom vars use `--skin-*` prefix.** A few other namespaces are reserved for Moltamp's internal chrome and are hard-blocked by the validator — stick to `--skin-*` (plus the documented `--t-*`, `--c-*`, `--effect-*` contract) and you won't hit them.
 4. **No `background` on `.moltamp-vibes`.** Use `skin.json` vibes slots for GIFs.
 5. **Every `::before`/`::after` needs `pointer-events: none`.**
 6. **No external URLs, `@import`, or JS.**
 7. **Assets under 5MB each, 20MB total.** PNG, JPG, WebP, GIF, SVG, AVIF only.
+8. **Don't try to smuggle forbidden tokens past the validator with CSS escape sequences.** It normalizes escapes (hex and identity) before running its pattern checks and will catch them. Comments (both `/* */` and `//`) are stripped first, so feel free to mention reserved names inside a doc comment — that's a false-positive-free zone.
 
 ## Custom Effects
 

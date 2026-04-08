@@ -1205,6 +1205,22 @@ Skin CSS is validated at load time. The validator returns **errors** (fatal — 
 - Invalid skin ID (must match `^[a-zA-Z0-9_-]+$`)
 - Asset exceeds 5MB, or total assets exceed 20MB
 - CSS contains external URLs, `@import`, `javascript:`, or `expression()`
+- CSS references any of the reserved internal chrome variable namespaces (see [Reserved internal variables](#reserved-internal-variables) below). The validator will emit a clear error naming the offending line.
+
+### How the validator reads your CSS
+
+Before the validator runs its pattern checks, it pre-processes `theme.css` so authors can't accidentally (or intentionally) sneak forbidden tokens past it:
+
+1. **Comments are stripped.** Both `/* block comments */` and `// line comments` are removed before any pattern test. This means you can safely mention reserved names inside a doc comment without triggering a false positive — e.g. `/* Do not style the internal license UI */` is fine.
+2. **CSS escape sequences are normalized.** The validator unescapes both hex escapes (`\6e`, `\6E `) and identity escapes (`\n`) to their underlying characters before pattern matching. Trying to hide a forbidden token behind `\` escapes will not get you past the validator — it sees through them. Don't waste your time.
+
+The practical upshot: write your CSS normally, keep your comments honest, and if the validator rejects something the message will tell you what it found.
+
+### Reserved internal variables
+
+Moltamp reserves several CSS custom-property namespaces for internal chrome (think: the surfaces the app uses to tell the user something important that must not be obscured). **Skins cannot read, set, or reference them.** Any `var(--x)` reference or declaration targeting a reserved namespace is a hard error at import.
+
+We intentionally do not list the reserved prefixes here — there is no legitimate reason for a skin to touch them, so listing them would just turn this doc into a cheat sheet. If you try, the validator will reject the skin on import with a clear error pointing at the offending declaration. When you see that error, rename your variable to the `--skin-*` prefix (or one of the documented `--t-*`, `--c-*`, `--effect-*` contract namespaces) and re-import.
 
 ### Warnings (logged, skin still loads)
 
@@ -1594,6 +1610,7 @@ Before sharing your skin:
 - [ ] Every `::before`/`::after` has `pointer-events: none`
 - [ ] No external URLs or `@import`
 - [ ] No selectors targeting Moltamp internal UI
+- [ ] No references to reserved internal variable namespaces (stick to `--skin-*`, `--t-*`, `--c-*`, `--effect-*`)
 - [ ] `theme.css` under 100KB
 - [ ] Assets under 5MB each, 20MB total
 - [ ] Tested at different panel sizes (resize handles)
