@@ -2,6 +2,13 @@
 
 The single source of truth for building Moltamp skins.
 
+> **Spec ↔ Validator contract:** This document is the spec. Two validators implement it and **must stay in lockstep**:
+>
+> - **App validator:** `moltamp/electron/skins/skin-validator.js` — runs at import time in the desktop app
+> - **Site validator:** `moltamp-site/functions/api/_shared/skin-validator.ts` — runs at upload time on moltamp.com
+>
+> Any rule added or changed below must land in both validators in the same change. Any validator change must be reflected here. A skin that passes one surface and fails the other is a broken contract — if you find drift, fix it.
+
 ## Philosophy
 
 Moltamp is the shell. Your skin is the experience.
@@ -247,18 +254,23 @@ Include `pointer-events: none` on every `::before` and `::after` pseudo-element.
 
 ### 10. All visual effects must be gated behind `--effect-*` variables
 
-Every visual flourish must be controllable by the user through the Effects panel. "Visual flourish" means anything that moves, glows, pulses, or overlays decorative content — specifically:
+Every visual flourish must be controllable by the user through the Effects panel. The validator scans `theme.css` for **six families** of effect and warns on import when any of them aren't gated behind an `--effect-*` variable:
 
-- **CSS animations** (`animation`, `@keyframes`)
-- **Box shadows and glows** (`box-shadow`, `text-shadow` beyond basic readability)
-- **Filters** (`filter: brightness()`, `saturate()`, `blur()`, etc. used decoratively)
-- **Animated GIF/image backgrounds** on panels (`background: url('assets/art.gif')`)
-- **Pseudo-element overlays** with visual content (scan lines, tickers, indicators)
+| Family | What it catches | Examples |
+|---|---|---|
+| **Motion** | CSS animations | `animation`, `animation-name`, `@keyframes` applications |
+| **Glow** | Luminous shadows & drop-shadow | `box-shadow`/`text-shadow` with blur ≥ 12px on pseudo-elements, `box-shadow` with blur ≥ 20px on regular elements, `filter: drop-shadow()` with large blur |
+| **Frost** | Blur / glass effects | `backdrop-filter: blur()`, `filter: blur()`, `backdrop-filter: saturate/brightness/contrast/hue-rotate` |
+| **Overlay** | Decorative layers & texture | `mix-blend-mode`, `repeating-linear-gradient`, `repeating-radial-gradient`, animated `.gif`/`.webp`/`.apng` backgrounds |
+| **Distortion** | Geometric warping | `transform: perspective/skew/rotate3d/matrix3d`, `mask`, `mask-image`, `-webkit-mask`, `clip-path` |
+| **Color shift** | Decorative filter chains | `filter: brightness/saturate/contrast/hue-rotate/invert/sepia/grayscale` |
 
-This means:
-- Declare an `--effect-*` variable in `:root` for each visual effect
-- Gate the effect so that when the variable is `0`, the effect is invisible
-- The validator warns on import when it detects ungated effects (see [Validation](#validation))
+This means for every flaggable rule in your CSS:
+- Declare an `--effect-*` variable in `:root`
+- Gate the effect so that when the variable is `0`, the effect is invisible or neutral
+- Name it descriptively (e.g. `--effect-frosted-glass`, not `--effect-fx-1`)
+
+The validator runs on import and emits one warning per ungated family per selector. Users see these in a preview popup before the skin is committed to their library.
 
 #### Effect Slider Range
 
@@ -349,14 +361,131 @@ When `--effect-vibes-pulse` is `0`, brightness stays at `1` (no visible change).
 }
 ```
 
+**Frost / backdrop-filter** — multiply the blur radius by the effect variable. When the user sets the effect to `0`, blur becomes `0px` (no effect):
+
+```css
+:root {
+  --effect-frosted-glass: 1;
+}
+.moltamp-titlebar,
+.moltamp-panel-left,
+.moltamp-panel-right {
+  backdrop-filter: blur(calc(8px * var(--effect-frosted-glass)));
+}
+```
+
+**Overlays / mix-blend-mode** — use `opacity` on the same element, since `mix-blend-mode` itself can't be disabled by a variable. When `opacity` is `0`, the blended layer disappears:
+
+```css
+:root {
+  --effect-screen-blend: 1;
+}
+.moltamp-vibes::before {
+  background: linear-gradient(135deg, rgba(255, 95, 135, 0.16), transparent);
+  mix-blend-mode: screen;
+  opacity: var(--effect-screen-blend);
+}
+```
+
+**Overlays / repeating gradients** — treat them like any other pseudo-element overlay: gate on `opacity`:
+
+```css
+:root {
+  --effect-scanlines: 1;
+}
+.moltamp-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.05) 3px
+  );
+  opacity: var(--effect-scanlines);
+}
+```
+
+**Distortion / transform** — multiply the distortion magnitude by the effect variable. For `perspective()`, divide by the variable so `0` collapses to no perspective:
+
+```css
+:root {
+  --effect-crt-curve: 1;
+}
+.moltamp-terminal {
+  /* At effect=0, skew is 0deg; at effect=1, skew is 0.5deg */
+  transform: skewX(calc(0.5deg * var(--effect-crt-curve)));
+}
+```
+
+**Distortion / mask & clip-path** — gate the whole element on `opacity`, or provide a `none` fallback behind a CSS custom property:
+
+```css
+:root {
+  --effect-vignette: 1;
+}
+.moltamp-vibes {
+  -webkit-mask: radial-gradient(ellipse at center, black 60%, transparent 100%);
+          mask: radial-gradient(ellipse at center, black 60%, transparent 100%);
+  opacity: calc(0.4 + 0.6 * var(--effect-vignette));
+}
+```
+
+**Color shift / filter chains** — for any `filter: hue-rotate / saturate / contrast / brightness / invert / sepia / grayscale`, collapse to the identity value (`0deg`, `1`, etc.) when the effect is `0`:
+
+```css
+:root {
+  --effect-hue-cycle: 1;
+}
+[data-activity="high"] .moltamp-vibes {
+  filter:
+    hue-rotate(calc(15deg * var(--effect-hue-cycle)))
+    saturate(calc(1 + 0.3 * var(--effect-hue-cycle)));
+}
+```
+
 #### What doesn't need gating
 
-- Static styling: backgrounds, borders, gradients, border-radius
+- Static styling: backgrounds, borders, gradients (non-repeating), border-radius
 - Subtle `transition` properties (hover states, active states)
 - Layout: padding, margins, font sizes, colors
 - Activity-based transitions (`[data-activity]`) that are purely visual feedback
+- Drop shadows under ~12px blur on pseudo-elements, or under ~20px blur on regular elements — these read as panel chrome, not glow
 
-**Why:** Users should have full control over their workspace. Animations should always be disableable for accessibility and preference. The validator detects ungated effects on import and flags them.
+**Why:** Users should have full control over their workspace. Every visual flourish should be disableable for accessibility and preference. The validator detects ungated effects on import and flags them in a preview popup before the skin is committed.
+
+---
+
+### 11. Don't declare dead toggles
+
+Every `--effect-X` variable you declare in `:root` must be read by at least one CSS rule via `var(--effect-X)`. If you declare it and never use it, you've created a **dead toggle**: the Effects panel shows a switch for it (because the panel discovers toggles by scanning `:root`), but flipping the switch does nothing.
+
+```css
+/* WRONG — --effect-glow appears in the panel but has no wire */
+:root {
+  --effect-glow: 1;
+}
+/* ...no rule anywhere reads var(--effect-glow)... */
+```
+
+```css
+/* RIGHT — declared AND wired */
+:root {
+  --effect-glow: 1;
+}
+.moltamp-terminal {
+  box-shadow: inset 0 0 calc(18px * var(--effect-glow)) var(--c-chrome-accent);
+}
+```
+
+The validator detects this pattern (declared in `:root`, never referenced in any non-`:root` rule) and warns on import. Two ways to fix a dead toggle:
+
+1. **Remove it from `:root`** if you don't want the toggle at all.
+2. **Add a rule that reads it** if you want the toggle to actually control something.
+
+**Why:** Dead toggles create silently broken UX — users toggle them and nothing happens. The Effects panel's entire job is to give users control over what the skin is doing, so a toggle that does nothing is worse than no toggle at all. Always wire what you declare.
 
 ---
 
@@ -1222,17 +1351,23 @@ Moltamp reserves several CSS custom-property namespaces for internal chrome (thi
 
 We intentionally do not list the reserved prefixes here — there is no legitimate reason for a skin to touch them, so listing them would just turn this doc into a cheat sheet. If you try, the validator will reject the skin on import with a clear error pointing at the offending declaration. When you see that error, rename your variable to the `--skin-*` prefix (or one of the documented `--t-*`, `--c-*`, `--effect-*` contract namespaces) and re-import.
 
-### Warnings (logged, skin still loads)
+### Warnings (shown in the import preview popup, skin can still be published)
 
 - `background` or `background-image` on `.moltamp-vibes`
 - `::before`/`::after` without `pointer-events: none`
-- `visibility: hidden`, `opacity: 0`, or `pointer-events: none` on global selectors (`*`, `body > *`, etc.)
-- **Ungated effects** — the validator scans for these patterns and warns when they aren't controlled by an `--effect-*` variable:
-  - `animation` properties not on an element with `opacity: var(--effect-*)` or `calc(... * var(--effect-*))`
-  - `box-shadow` with non-zero blur/spread not inside a `calc(... * var(--effect-*))` expression
-  - `background` or `background-image` referencing `.gif`, `.webp` (animated), or `.apng` files on panel elements without an opacity gate
-  - `filter` with `brightness`, `saturate`, `blur`, or `hue-rotate` in keyframes without a `calc(... * var(--effect-*))` neutralizer
-- On import, the user sees: *"This skin has effects not yet wired to the Effects panel. Add --effect-* gates to give users control."*
+- `visibility: hidden`, `opacity: 0`, or `pointer-events: none` on security-critical selectors (permission dialogs, auth prompts)
+- **Ungated effects** — the validator scans for six families (see [Rule 10](#10-all-visual-effects-must-be-gated-behind---effect--variables)) and emits one warning per ungated family per selector:
+  - **Motion** — `animation` / `animation-name` on a rule whose body has no `var(--effect-*)` reference and doesn't use an animation name whose `@keyframes` body is internally gated
+  - **Glow** — `box-shadow` / `text-shadow` on pseudo-elements (any non-zero blur), or on regular elements with blur ≥ 20px, or `filter: drop-shadow()` with large blur — none gated by `calc(... * var(--effect-*))`
+  - **Frost** — `backdrop-filter` or `filter: blur()` without a `calc(... * var(--effect-*))` multiplier
+  - **Overlay** — `mix-blend-mode`, `repeating-linear-gradient`, `repeating-radial-gradient`, or animated GIF/WebP/APNG backgrounds without an `opacity: var(--effect-*)` gate
+  - **Distortion** — `transform: perspective/skew/skewX/skewY/rotate3d/matrix3d`, `mask`, `mask-image`, `-webkit-mask`, `clip-path` without `calc()` gating or `opacity` gating on the element
+  - **Color shift** — `filter: brightness/saturate/contrast/hue-rotate/invert/sepia/grayscale` without a `calc()` neutralizer
+- **Dead toggles** ([Rule 11](#11-dont-declare-dead-toggles)) — `--effect-X` declared in `:root` but no rule in the CSS reads it via `var(--effect-X)`
+- **Selectors exempt from ungated-effect checks** (these never trigger family warnings, so you can use them freely): `:hover`, `:focus`, `:active`, `.active`, `.glow-active`, `.crt-active`, `[data-shell-state="error"]`, settings UI classes (`.moltamp-skin-card`, `.moltamp-skin-panel`, `.moltamp-skin-overlay`, `.moltamp-input`)
+- **Keyframe propagation**: if an `@keyframes` body uses `var(--effect-*)` internally, any `animation:` reference to that keyframe is considered gated and won't trigger a motion warning
+
+All warnings appear in the **import preview popup**. Each warning has a "Copy AI fix prompt" button that copies a self-contained remediation prompt — paste it into Claude/ChatGPT/Cursor/etc. and you'll get a patched theme.css back. Users see all warnings grouped by family and can choose *Publish anyway* (the skin still loads) or *Cancel*.
 
 ### Import validation
 
@@ -1396,15 +1531,29 @@ CSS RULES:
 - NEVER target Moltamp internal UI elements (validator hard-blocks)
 
 EFFECTS — CRITICAL:
-- EVERY animation, box-shadow, glow, filter, and animated GIF background MUST be gated
+- The validator scans SIX effect families and warns when any are ungated:
+    1. MOTION        — animation, animation-name, @keyframes applications
+    2. GLOW          — box-shadow/text-shadow with large blur, filter: drop-shadow
+    3. FROST         — backdrop-filter, filter: blur()
+    4. OVERLAY       — mix-blend-mode, repeating-linear/radial-gradient, animated gif/webp/apng bg
+    5. DISTORTION    — transform: perspective/skew/rotate3d/matrix3d, mask, clip-path
+    6. COLOR SHIFT   — filter: brightness/saturate/contrast/hue-rotate/invert/sepia/grayscale
+- EVERY ungated effect in any of those six families will trigger a warning on import
 - Declare --effect-myeffect: 1; in :root — it auto-registers as a toggle (0%-200%)
 - Effect variable range: 0 (off) to 2 (max boost), where 1 = 100% (default)
-- Gate pseudo-elements: opacity: var(--effect-myeffect)
-- Gate box-shadows in keyframes: calc(blur * var(--effect-myeffect))
-- Gate filters: brightness(calc(1 + delta * var(--effect-myeffect))) — neutralizes to 1 at 0
-- Gate animated backgrounds: opacity: calc(base * var(--effect-myeffect))
+- Gate pseudo-elements:       opacity: var(--effect-myeffect)
+- Gate box-shadows:            box-shadow: inset 0 0 calc(18px * var(--effect-myeffect)) <color>
+- Gate backdrop-filter:        backdrop-filter: blur(calc(8px * var(--effect-myeffect)))
+- Gate mix-blend-mode:         opacity: var(--effect-myeffect) (on the same element)
+- Gate repeating gradients:    opacity: var(--effect-myeffect) (on the overlay element)
+- Gate transform distortion:   transform: skewX(calc(0.5deg * var(--effect-myeffect)))
+- Gate color-shift filters:    filter: hue-rotate(calc(15deg * var(--effect-myeffect)))
+- Gate animated backgrounds:   opacity: calc(base * var(--effect-myeffect))
+- Gate filters in keyframes:   brightness(calc(1 + delta * var(--effect-myeffect))) — neutralizes to 1 at 0
 - If keyframes use opacity, use filter: opacity() in keyframes instead
-- Only exception: [data-activity] transitions (system feedback, not decoration)
+- DEAD TOGGLES: every --effect-X declared in :root must be READ by at least one rule via var(--effect-X).
+  Declaring it without reading it creates a silently broken toggle in the Effects panel.
+- Exemptions (never trigger warnings): :hover, :focus, :active, .active, [data-shell-state="error"]
 - Optional: add labels in skin.json under "effects" key
 
 VIBES IMAGES:
@@ -1587,10 +1736,13 @@ Before sharing your skin:
 - [ ] Custom variables use `--skin-*` prefix
 
 **Effects & Animations**
-- [ ] Every animation gated behind `--effect-*` variable
-- [ ] Every box-shadow glow gated behind `--effect-*` variable
-- [ ] Every decorative filter gated behind `--effect-*` variable
-- [ ] Every animated GIF background gated behind `--effect-*` variable
+- [ ] Every **motion** effect gated (`animation`, `@keyframes` applications)
+- [ ] Every **glow** gated (box-shadow / text-shadow blur, `filter: drop-shadow`)
+- [ ] Every **frost** gated (`backdrop-filter`, `filter: blur()`)
+- [ ] Every **overlay** gated (`mix-blend-mode`, `repeating-*-gradient`, animated GIF/WebP backgrounds)
+- [ ] Every **distortion** gated (`transform: perspective/skew`, `mask`, `clip-path`)
+- [ ] Every **color shift** gated (`filter: brightness/saturate/contrast/hue-rotate/invert/sepia/grayscale`)
+- [ ] No **dead toggles** — every `--effect-X` in `:root` is read by at least one rule
 - [ ] Effect labels added to `skin.json` for custom effects
 - [ ] Slider range tested — effects look good from 0% to 200%
 
