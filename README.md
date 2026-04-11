@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/shoot-here/moltamp-skins/main/.github/assets/banner.svg" alt="Moltamp Skins — community themes for AI terminals" width="100%"/>
+<img src="https://moltamp.com/images/og-image.png" alt="MOLTamp — Skinnable Shell for AI Terminals" width="100%"/>
 
 <br/><br/>
 
